@@ -7,7 +7,13 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { formatPhotoTimestamp } from '@/lib/dates';
 import { formatLocationLine } from '@/lib/format';
-import { deleteReportPhoto, getReportPhoto, updateReportPhoto } from '@/repositories/photoRepository';
+import {
+  deleteReportPhoto,
+  getReportPhoto,
+  moveReportPhotoDown,
+  moveReportPhotoUp,
+  updateReportPhoto,
+} from '@/repositories/photoRepository';
 import type { ReportPhoto } from '@/types/photo';
 
 export default function PhotoNoteScreen() {
@@ -40,6 +46,22 @@ export default function PhotoNoteScreen() {
     setIsSaving(false);
     setPhoto(updated);
     router.back();
+  }
+
+  async function handleMove(direction: 'up' | 'down') {
+    if (!photo) {
+      return;
+    }
+
+    const moved =
+      direction === 'up' ? await moveReportPhotoUp(photo.id) : await moveReportPhotoDown(photo.id);
+    if (!moved) {
+      Alert.alert('Photo order unchanged', `This photo is already at the ${direction === 'up' ? 'top' : 'bottom'}.`);
+      return;
+    }
+
+    setPhoto(moved);
+    Alert.alert('Photo order updated', 'The report photo order was saved.');
   }
 
   function handleDelete() {
@@ -98,6 +120,14 @@ export default function PhotoNoteScreen() {
 
       <View style={styles.actions}>
         <Button disabled={isSaving} onPress={handleSave} title={isSaving ? 'Saving…' : 'Save photo note'} />
+        <View style={styles.row}>
+          <Button onPress={() => void handleMove('up')} variant="secondary">
+            Move up
+          </Button>
+          <Button onPress={() => void handleMove('down')} variant="secondary">
+            Move down
+          </Button>
+        </View>
         <Button onPress={handleDelete} title="Delete photo" variant="danger" />
       </View>
     </Screen>
@@ -133,6 +163,10 @@ const styles = StyleSheet.create({
   meta: {
     color: '#64748b',
     marginTop: 8,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 10,
   },
   textArea: {
     minHeight: 110,

@@ -127,3 +127,48 @@ export async function deleteReportPhoto(id: string): Promise<void> {
     await db.runAsync('UPDATE reports SET updated_at = ? WHERE id = ?', [nowIso(), existing.reportId]);
   }
 }
+
+export async function moveReportPhoto(id: string, direction: 'up' | 'down'): Promise<ReportPhoto | null> {
+  await initializeDatabase();
+  const existing = await getReportPhoto(id);
+  if (!existing) {
+    return null;
+  }
+
+  const db = await getDatabase();
+  const operator = direction === 'up' ? '<' : '>';
+  const order = direction === 'up' ? 'DESC' : 'ASC';
+  const neighbor = await db.getFirstAsync<ReportPhotoRow>(
+    `SELECT * FROM report_photos
+     WHERE report_id = ? AND sort_order ${operator} ?
+     ORDER BY sort_order ${order}
+     LIMIT 1`,
+    [existing.reportId, existing.sortOrder],
+  );
+
+  if (!neighbor) {
+    return null;
+  }
+
+  await db.withTransactionAsync(async () => {
+    await db.runAsync('UPDATE report_photos SET sort_order = ? WHERE id = ?', [
+      neighbor.sort_order,
+      existing.id,
+    ]);
+    await db.runAsync('UPDATE report_photos SET sort_order = ? WHERE id = ?', [
+      existing.sortOrder,
+      neighbor.id,
+    ]);
+    await db.runAsync('UPDATE reports SET updated_at = ? WHERE id = ?', [nowIso(), existing.reportId]);
+  });
+
+  return getReportPhoto(id);
+}
+
+export function moveReportPhotoUp(id: string): Promise<ReportPhoto | null> {
+  return moveReportPhoto(id, 'up');
+}
+
+export function moveReportPhotoDown(id: string): Promise<ReportPhoto | null> {
+  return moveReportPhoto(id, 'down');
+}

@@ -28,6 +28,8 @@ export interface CreateReportPhotoInput {
 export type UpdateReportPhotoInput = Partial<
   Pick<
     ReportPhoto,
+    | 'localUri'
+    | 'fileName'
     | 'caption'
     | 'sectionLabel'
     | 'takenAt'
