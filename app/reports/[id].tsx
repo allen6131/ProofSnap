@@ -103,6 +103,9 @@ export default function ReportEditorScreen() {
         localUri: stagedPhoto.localUri,
         fileName: stagedPhoto.fileName,
         takenAt: stagedPhoto.takenAt,
+        latitude: stagedPhoto.latitude,
+        longitude: stagedPhoto.longitude,
+        locationAccuracy: stagedPhoto.locationAccuracy,
       });
       await loadReport();
     } catch (error) {
