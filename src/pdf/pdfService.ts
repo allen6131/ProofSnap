@@ -2,7 +2,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
-import { buildEntitlementState } from '@/entitlement/entitlementRules';
+import { loadLocalEntitlement } from '@/entitlement/localEntitlementProvider';
 import { listReportPhotos } from '@/repositories/photoRepository';
 import { getReport } from '@/repositories/reportRepository';
 import { getBrandingSettings } from '@/repositories/settingsRepository';
@@ -15,12 +15,16 @@ export async function generateReportPdf(reportId: string): Promise<string> {
     throw new Error('Report not found.');
   }
 
-  const [photos, branding] = await Promise.all([listReportPhotos(reportId), getBrandingSettings()]);
+  const [photos, branding, entitlement] = await Promise.all([
+    listReportPhotos(reportId),
+    getBrandingSettings(),
+    loadLocalEntitlement(),
+  ]);
   const html = generateReportHtml({
     report,
     photos,
     branding,
-    entitlement: buildEntitlementState({ plan: 'free' }),
+    entitlement,
   });
   const result = await Print.printToFileAsync({ html, base64: false });
   const exportDirectory = `${FileSystem.documentDirectory ?? ''}reports/${reportId}/exports/`;

@@ -3,17 +3,17 @@ import type { EntitlementPlan, EntitlementState } from '@/types/entitlement';
 
 import { buildEntitlementState } from './entitlementRules';
 
-const PLAN_SETTING_KEY = 'devEntitlementPlan';
+export const ENTITLEMENT_PLAN_SETTING_KEY = 'dev.entitlement.plan';
 
 export async function loadLocalEntitlement(
-  reportsCreatedThisMonth: number,
+  reportsCreatedThisMonth = 0,
 ): Promise<EntitlementState> {
-  const plan = ((await getAppSetting(PLAN_SETTING_KEY)) as EntitlementPlan | null) ?? 'free';
+  const plan = ((await getAppSetting(ENTITLEMENT_PLAN_SETTING_KEY)) as EntitlementPlan | null) ?? 'free';
   return buildEntitlementState({ plan, reportsCreatedThisMonth });
 }
 
 export async function saveLocalEntitlementPlan(plan: EntitlementPlan): Promise<void> {
-  await setAppSetting(PLAN_SETTING_KEY, plan);
+  await setAppSetting(ENTITLEMENT_PLAN_SETTING_KEY, plan);
 }
 
 export const localEntitlementProvider = {

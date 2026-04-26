@@ -7,11 +7,11 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { REPORT_TEMPLATES } from '@/data/reportTemplates';
 import {
-  buildEntitlementState,
   canCreateReport,
   getMonthKey,
   getReportLimitMessage,
 } from '@/entitlement/entitlementRules';
+import { loadLocalEntitlement } from '@/entitlement/localEntitlementProvider';
 import { countReportsCreatedInMonth, createReport } from '@/repositories/reportRepository';
 
 export default function NewReportScreen() {
@@ -23,10 +23,7 @@ export default function NewReportScreen() {
   }, []);
 
   async function handleCreate(templateId: string, templateName: string) {
-    const entitlement = buildEntitlementState({
-      plan: 'free',
-      reportsCreatedThisMonth: reportsThisMonth,
-    });
+    const entitlement = await loadLocalEntitlement(reportsThisMonth);
     const decision = canCreateReport(entitlement);
 
     if (!decision.allowed) {

@@ -49,15 +49,15 @@ export default function PdfExportScreen() {
     <Screen>
       <Text style={styles.title}>PDF export</Text>
       <Text style={styles.body}>
-        ProofSnap generates PDFs locally with report details, timestamps, captions, and a free-tier
-        watermark.
+        ProofSnap generates PDFs locally with report details, timestamps, captions, and the
+        watermark/branding for your current local entitlement.
       </Text>
 
       <Card>
-        <Text style={styles.cardTitle}>Free export</Text>
+        <Text style={styles.cardTitle}>Local export</Text>
         <Text style={styles.body}>
-          This export includes the ProofSnap watermark. Toggle Pro in settings later to test branded,
-          watermark-free exports.
+          Free exports include the ProofSnap watermark. Toggle Pro in settings to test branded,
+          watermark-free exports without adding real store purchases yet.
         </Text>
         {lastPdfUri ? <Text style={styles.uri}>Last PDF: {lastPdfUri}</Text> : null}
       </Card>

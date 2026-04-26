@@ -4,11 +4,10 @@ import { Alert, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
+import { ENTITLEMENT_PLAN_SETTING_KEY } from '@/entitlement/localEntitlementProvider';
 import { getAppSetting, setAppSetting } from '@/repositories/appSettingsRepository';
 import { getBrandingSettings, saveBrandingSettings } from '@/repositories/settingsRepository';
 import type { BrandingSettingsPatch } from '@/types/settings';
-
-const devProKey = 'dev.entitlement.plan';
 
 export default function SettingsScreen() {
   const [form, setForm] = useState<BrandingSettingsPatch>({});
@@ -19,7 +18,7 @@ export default function SettingsScreen() {
     setLoading(true);
     const [branding, plan] = await Promise.all([
       getBrandingSettings(),
-      getAppSetting(devProKey),
+      getAppSetting(ENTITLEMENT_PLAN_SETTING_KEY),
     ]);
     setForm(branding);
     setDevPro(plan === 'pro');
@@ -39,7 +38,7 @@ export default function SettingsScreen() {
 
   const save = async () => {
     await saveBrandingSettings(form);
-    await setAppSetting(devProKey, devPro ? 'pro' : 'free');
+    await setAppSetting(ENTITLEMENT_PLAN_SETTING_KEY, devPro ? 'pro_annual' : 'free');
     Alert.alert('Saved', 'Branding and local entitlement settings are saved on this device.');
   };
 
