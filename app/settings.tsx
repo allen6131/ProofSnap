@@ -5,6 +5,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { ENTITLEMENT_PLAN_SETTING_KEY } from '@/entitlement/localEntitlementProvider';
+import { BackupSettingsSection } from '@/features/settings/BackupSettingsSection';
 import { LOCATION_STAMPING_SETTING_KEY, pickPhotoFromLibrary } from '@/photos/photoService';
 import { getAppSetting, setAppSetting } from '@/repositories/appSettingsRepository';
 import { getBrandingSettings, saveBrandingSettings } from '@/repositories/settingsRepository';
@@ -140,13 +141,7 @@ export default function SettingsScreen() {
         </View>
       </Card>
 
-      <Card>
-        <Text style={styles.sectionTitle}>Encrypted backup</Text>
-        <Text style={styles.helper}>
-          ProofSnap works offline by default. Optional encrypted cloud backup is planned behind an
-          opt-in provider. No reports or photos upload from this MVP.
-        </Text>
-      </Card>
+      <BackupSettingsSection />
 
       <Button onPress={() => void save()}>Save settings</Button>
     </Screen>

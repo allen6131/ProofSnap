@@ -1,20 +1,4 @@
-export type BackupProviderStatus = 'not-configured' | 'ready' | 'backing-up' | 'error';
-
-export interface BackupManifest {
-  version: 1;
-  createdAt: string;
-  appName: 'ProofSnap';
-  encrypted: boolean;
-  reportCount: number;
-  photoCount: number;
-}
-
-export interface BackupStatus {
-  provider: 'local-placeholder' | 'cloud';
-  status: BackupProviderStatus;
-  message: string;
-  lastBackupAt?: string | null;
-}
+import type { BackupStatus } from './backupTypes';
 
 export interface BackupProvider {
   getStatus(): Promise<BackupStatus>;
