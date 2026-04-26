@@ -4,7 +4,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { ENTITLEMENT_PRODUCTS } from '@/entitlement/products';
-import { localEntitlementProvider } from '@/entitlement/localEntitlementProvider';
+import { localPurchaseProvider } from '@/entitlement/localEntitlementProvider';
 
 export default function UpgradeScreen() {
   const proAnnual = ENTITLEMENT_PRODUCTS.find((product) => product.id === 'pro_annual');
@@ -43,14 +43,21 @@ export default function UpgradeScreen() {
         <Button
           label="Simulate Pro for QA"
           onPress={() => {
-            localEntitlementProvider.setOverridePlan('pro_annual').catch(console.error);
+            localPurchaseProvider.startAnnualPurchase().catch(console.error);
+          }}
+        />
+        <Button
+          label="Simulate lifetime unlock"
+          variant="secondary"
+          onPress={() => {
+            localPurchaseProvider.startLifetimePurchase().catch(console.error);
           }}
         />
         <Button
           label="Restore purchases (stub)"
           variant="secondary"
           onPress={() => {
-            localEntitlementProvider.restorePurchases().catch(console.error);
+            localPurchaseProvider.restorePurchases().catch(console.error);
           }}
         />
       </View>
