@@ -1,14 +1,15 @@
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { getTemplateById } from '@/data/reportTemplates';
 import { formatPhotoTimestamp } from '@/lib/dates';
-import { listReportPhotos } from '@/repositories/photoRepository';
+import { addPhotoToReport, listReportPhotos } from '@/repositories/photoRepository';
 import { deleteReport, getReport, updateReport } from '@/repositories/reportRepository';
+import { addPhotoFromCamera, addPhotoFromLibrary } from '@/photos/photoService';
 import type { ReportPhoto } from '@/types/photo';
 import type { Report, ReportStatus } from '@/types/report';
 
@@ -87,6 +88,29 @@ export default function ReportEditorScreen() {
     ]);
   }
 
+  async function handleAddPhoto(source: 'camera' | 'library') {
+    if (!id) {
+      return;
+    }
+
+    try {
+      const stagedPhoto =
+        source === 'camera' ? await addPhotoFromCamera(id) : await addPhotoFromLibrary(id);
+      if (!stagedPhoto) {
+        return;
+      }
+      await addPhotoToReport(id, {
+        localUri: stagedPhoto.localUri,
+        fileName: stagedPhoto.fileName,
+        takenAt: stagedPhoto.takenAt,
+      });
+      await loadReport();
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Please try again.';
+      Alert.alert('Could not add photo', message);
+    }
+  }
+
   if (!report) {
     return (
       <Screen>
@@ -145,12 +169,21 @@ export default function ReportEditorScreen() {
 
       <Card>
         <Text style={styles.cardTitle}>Photos</Text>
+        <View style={styles.row}>
+          <Button variant="secondary" onPress={() => void handleAddPhoto('camera')}>
+            Add from camera
+          </Button>
+          <Button variant="secondary" onPress={() => void handleAddPhoto('library')}>
+            Add from library
+          </Button>
+        </View>
         {photos.length === 0 ? (
-          <Text style={styles.body}>No photos yet. Capture/import lands in the next phase.</Text>
+          <Text style={styles.body}>No photos yet. Add from camera or library to start documenting.</Text>
         ) : (
           photos.map((photo) => (
             <View key={photo.id} style={styles.photoRow}>
-              <View>
+              <Image source={{ uri: photo.localUri }} style={styles.thumbnail} />
+              <View style={styles.photoText}>
                 <Text style={styles.photoTitle}>{photo.caption || 'Untitled photo'}</Text>
                 <Text style={styles.body}>
                   {photo.sectionLabel || 'No section'} • {formatPhotoTimestamp(photo.takenAt)}
@@ -229,6 +262,15 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 10,
+  },
+  photoText: {
+    flex: 1,
+  },
+  thumbnail: {
+    backgroundColor: '#e2e8f0',
+    borderRadius: 10,
+    height: 64,
+    width: 64,
   },
   title: {
     color: '#0f172a',
