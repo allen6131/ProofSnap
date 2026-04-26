@@ -1,4 +1,4 @@
-# ProofPack Manual QA Checklist
+# ProofSnap Manual QA Checklist
 
 ## App launch
 - [ ] App launches without network connection.
@@ -63,6 +63,11 @@
 - [ ] Pro flag allows unlimited reports.
 - [ ] Free user PDFs show watermark.
 - [ ] Pro user PDFs do not show watermark.
+
+## Backup
+- [ ] App clearly says backup is optional and not configured in the MVP.
+- [ ] No report/photo data uploads during normal MVP flows.
+- [ ] Backup provider boundary remains separate from report/photo repositories.
 
 ## Regression
 - [ ] Typecheck passes.

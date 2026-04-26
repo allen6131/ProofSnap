@@ -1,10 +1,10 @@
-# Codex Task Prompts for ProofPack
+# Codex Task Prompts for ProofSnap
 
 Use these prompts one at a time. Let Codex finish, run tests/typecheck, and review the diff before moving to the next task.
 
 ## Task 0 - Inspect or initialize the repo
 ```text
-We are building ProofPack, a local-first React Native + Expo + TypeScript app. Read AGENTS.md and docs/*.md first. Inspect the repository. If it is empty, initialize a new Expo app with TypeScript and Expo Router. If it already exists, adapt to its conventions. Do not implement product features yet. Set up formatting, basic folder structure, and a clean README. Then run the default typecheck/lint/test commands that exist, or add minimal scripts if missing. Summarize the resulting structure and any assumptions.
+We are building ProofSnap, a local-first React Native + Expo + TypeScript app. Read AGENTS.md and docs/*.md first. Inspect the repository. If it is empty, initialize a new Expo app with TypeScript and Expo Router. If it already exists, adapt to its conventions. Do not implement product features yet. Set up formatting, basic folder structure, and a clean README. Then run the default typecheck/lint/test commands that exist, or add minimal scripts if missing. Summarize the resulting structure and any assumptions.
 ```
 
 Acceptance criteria:
@@ -15,7 +15,7 @@ Acceptance criteria:
 
 ## Task 1 - Add core domain types and templates
 ```text
-Implement the core ProofPack domain types and built-in report templates. Add TypeScript types for Report, ReportPhoto, BrandingSettings, EntitlementState, and ReportTemplate. Add four built-in templates: Job Completion Report, Before / After Report, Property Condition Report, and Cleaning Proof Report. Keep templates as data/config. Add simple tests for template IDs and default sections. Do not build UI yet beyond what is necessary to compile.
+Implement the core ProofSnap domain types and built-in report templates. Add TypeScript types for Report, ReportPhoto, BrandingSettings, EntitlementState, and ReportTemplate. Add four built-in templates: Job Completion Report, Before / After Report, Property Condition Report, and Cleaning Proof Report. Keep templates as data/config. Add simple tests for template IDs and default sections. Do not build UI yet beyond what is necessary to compile.
 ```
 
 Acceptance criteria:

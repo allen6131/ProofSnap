@@ -1,4 +1,4 @@
-# ProofPack MVP Specification
+# ProofSnap MVP Specification
 
 ## Non-negotiable MVP scope
 The first version should be intentionally small:

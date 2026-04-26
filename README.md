@@ -32,6 +32,10 @@ npm test
 - `src/types/` — core domain types.
 - `src/data/` — built-in report templates.
 - `src/entitlement/` — free/Pro entitlement rules and purchase abstractions.
+- `src/photos/` — camera/library import and app-controlled photo storage.
+- `src/pdf/` — pure HTML report generation plus local PDF/share services.
+- `src/repositories/` — SQLite repository layer.
+- `src/backup/` — opt-in encrypted backup provider boundary for future cloud backup.
 - `src/lib/` — shared utilities.
 - `docs/` — product, data model, launch, and QA documentation.
 

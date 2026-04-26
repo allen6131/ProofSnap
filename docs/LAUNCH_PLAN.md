@@ -1,10 +1,10 @@
-# ProofPack Launch Plan
+# ProofSnap Launch Plan
 
 ## Narrow initial niche
 Launch for **Airbnb cleaners and small property managers** first.
 
 ## App name options
-- ProofPack
+- ProofSnap
 - JobProof
 - SiteProof
 - PhotoReport Pro
@@ -17,7 +17,7 @@ Photo reports for jobs, rentals, and repairs.
 Create timestamped photo reports for cleaning, repairs, inspections, move-ins, and job completion. Export a professional PDF in seconds.
 
 ## Long description draft
-ProofPack helps cleaners, contractors, landlords, and property managers document work with professional photo reports. Take or import photos, add timestamps and notes, then export a polished PDF you can send to clients, owners, tenants, or your own records.
+ProofSnap helps cleaners, contractors, landlords, and property managers document work with professional photo reports. Take or import photos, add timestamps and notes, then export a polished PDF you can send to clients, owners, tenants, or your own records.
 
 Useful for:
 - Airbnb cleaning proof
