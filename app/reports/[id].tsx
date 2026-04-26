@@ -182,7 +182,13 @@ export default function ReportEditorScreen() {
         ) : (
           photos.map((photo) => (
             <View key={photo.id} style={styles.photoRow}>
-              <Image source={{ uri: photo.localUri }} style={styles.thumbnail} />
+              {photo.localUri ? (
+                <Image source={{ uri: photo.localUri }} style={styles.thumbnail} />
+              ) : (
+                <View style={[styles.thumbnail, styles.missingThumbnail]}>
+                  <Text style={styles.missingText}>Missing image</Text>
+                </View>
+              )}
               <View style={styles.photoText}>
                 <Text style={styles.photoTitle}>{photo.caption || 'Untitled photo'}</Text>
                 <Text style={styles.body}>
@@ -271,6 +277,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 64,
     width: 64,
+  },
+  missingThumbnail: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 6,
+  },
+  missingText: {
+    color: '#64748b',
+    fontSize: 10,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   title: {
     color: '#0f172a',
