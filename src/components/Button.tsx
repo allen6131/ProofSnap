@@ -1,5 +1,11 @@
 import type { PropsWithChildren } from 'react';
-import { Pressable, StyleSheet, Text, type PressableProps } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  type PressableProps,
+  type PressableStateCallbackType,
+} from 'react-native';
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 
@@ -27,7 +33,9 @@ export function Button({
         styles[variant],
         disabled && styles.disabled,
         pressed && !disabled && styles.pressed,
-        typeof style === 'function' ? style({ pressed }) : style,
+        typeof style === 'function'
+          ? style({ pressed, hovered: false } as PressableStateCallbackType)
+          : style,
       ]}
       {...props}
     >

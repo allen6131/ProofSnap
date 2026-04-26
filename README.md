@@ -20,7 +20,6 @@ npm install
 npm start
 npm run android
 npm run ios
-npm run web
 npm run typecheck
 npm run lint
 npm test

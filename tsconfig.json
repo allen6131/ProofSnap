@@ -4,10 +4,22 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
-    "types": ["jest"]
+    "types": [
+      "jest"
+    ]
   },
-  "include": ["app", "src", "jest.config.js", "expo-env.d.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "app",
+    "src",
+    "jest.config.js",
+    "expo-env.d.ts",
+    ".expo/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
