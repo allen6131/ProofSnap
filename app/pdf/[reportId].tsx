@@ -5,7 +5,7 @@ import { Alert, StyleSheet, Text } from 'react-native';
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
-import { generateReportPdf, shareReportPdf } from '@/pdf/pdfService';
+import { generateReportPdf, sharePdfUri } from '@/pdf/pdfService';
 
 export default function PdfExportScreen() {
   const { reportId } = useLocalSearchParams<{ reportId: string }>();
@@ -36,7 +36,7 @@ export default function PdfExportScreen() {
     try {
       const uri = lastPdfUri ?? (await generateReportPdf(reportId));
       setLastPdfUri(uri);
-      await shareReportPdf(reportId);
+      await sharePdfUri(uri);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Please try again.';
       Alert.alert('Could not share PDF', message);
