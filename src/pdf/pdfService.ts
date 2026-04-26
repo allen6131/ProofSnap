@@ -1,4 +1,3 @@
-import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
@@ -8,6 +7,7 @@ import { getReport } from '@/repositories/reportRepository';
 import { getBrandingSettings } from '@/repositories/settingsRepository';
 
 import { generateReportHtml } from './htmlGenerator';
+import { movePdfToReportExports } from './pdfStorage';
 
 export async function generateReportPdf(reportId: string): Promise<string> {
   const report = await getReport(reportId);
@@ -27,11 +27,7 @@ export async function generateReportPdf(reportId: string): Promise<string> {
     entitlement,
   });
   const result = await Print.printToFileAsync({ html, base64: false });
-  const exportDirectory = `${FileSystem.documentDirectory ?? ''}reports/${reportId}/exports/`;
-  await FileSystem.makeDirectoryAsync(exportDirectory, { intermediates: true });
-  const destination = `${exportDirectory}${reportId}-${Date.now()}.pdf`;
-  await FileSystem.moveAsync({ from: result.uri, to: destination });
-  return destination;
+  return movePdfToReportExports(reportId, result.uri);
 }
 
 export async function sharePdfUri(uri: string): Promise<void> {

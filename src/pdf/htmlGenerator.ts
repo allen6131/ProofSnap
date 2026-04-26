@@ -1,17 +1,9 @@
 import { getTemplateById } from '@/data/reportTemplates';
 import { formatDate, formatPhotoTimestamp } from '@/lib/dates';
 import { APP_NAME, formatLocationLine } from '@/lib/format';
-import type { EntitlementState } from '@/types/entitlement';
 import type { ReportPhoto } from '@/types/photo';
-import type { Report } from '@/types/report';
-import type { BrandingSettings } from '@/types/settings';
 
-export interface GenerateReportHtmlInput {
-  report: Report;
-  photos: ReportPhoto[];
-  branding: BrandingSettings;
-  entitlement: EntitlementState;
-}
+import type { GenerateReportHtmlInput } from './pdfTypes';
 
 function escapeHtml(value: string): string {
   return value
