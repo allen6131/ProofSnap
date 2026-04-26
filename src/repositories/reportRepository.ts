@@ -1,6 +1,7 @@
 import { getDatabase, initializeDatabase } from '@/db/database';
 import { createId } from '@/lib/ids';
 import { nowIso } from '@/lib/dates';
+import { deleteReportFiles } from '@/photos/photoStorage';
 import type { CreateReportInput, Report, ReportWithPhotoCount, UpdateReportInput } from '@/types/report';
 
 import { mapReportListRow, mapReportRow, type ReportListRow, type ReportRow } from './mappers';
@@ -132,6 +133,13 @@ export async function deleteReport(id: string): Promise<void> {
   await initializeDatabase();
   const db = await getDatabase();
   await db.runAsync('DELETE FROM reports WHERE id = ?', [id]);
+
+  try {
+    await deleteReportFiles(id);
+  } catch {
+    // Metadata deletion is the source of truth. File cleanup is best-effort so
+    // a transient filesystem issue does not leave an undeletable report in-app.
+  }
 }
 
 export async function archiveReport(id: string): Promise<void> {

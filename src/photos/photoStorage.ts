@@ -33,3 +33,13 @@ export async function copyPhotoIntoReport(reportId: string, sourceUri: string): 
 
   return { localUri, fileName };
 }
+
+export async function deleteReportFiles(reportId: string): Promise<void> {
+  const reportDirectory = `${FileSystem.documentDirectory ?? ''}reports/${reportId}/`;
+  const info = await FileSystem.getInfoAsync(reportDirectory);
+  if (!info.exists) {
+    return;
+  }
+
+  await FileSystem.deleteAsync(reportDirectory, { idempotent: true });
+}
