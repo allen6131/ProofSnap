@@ -26,6 +26,7 @@ export function Button({
 }: PropsWithChildren<ButtonProps>) {
   return (
     <Pressable
+      accessibilityLabel={props.accessibilityLabel ?? label ?? title ?? (typeof children === 'string' ? children : undefined)}
       accessibilityRole="button"
       disabled={disabled}
       style={({ pressed }) => [
