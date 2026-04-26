@@ -1,21 +1,45 @@
-# ProofPack Codex Kit
+# ProofSnap
 
-This kit contains project instructions and staged Codex prompts for building ProofPack, a local-first mobile app that creates timestamped photo proof reports and exports PDFs.
+ProofSnap is a local-first mobile app for contractors, cleaners, landlords, Airbnb hosts, property managers, and other mobile workers who need professional timestamped photo reports.
 
-## Files
-- `AGENTS.md` - Put this at the root of your repository so Codex can use it as persistent project guidance.
-- `docs/PRODUCT_BRIEF.md` - Product positioning and monetization.
-- `docs/MVP_SPEC.md` - Feature specification.
-- `docs/DATA_MODEL.md` - Suggested SQLite schema and TypeScript types.
-- `docs/CODEX_TASKS.md` - Copy-paste prompts for Codex, one task at a time.
-- `docs/QA_CHECKLIST.md` - Manual test checklist.
-- `docs/LAUNCH_PLAN.md` - App Store positioning and launch notes.
-- `docs/EXTRA_APP_IDEAS.md` - Other low-maintenance side app ideas.
+The MVP promise is simple: create a report, add timestamped photos with notes, export a readable PDF, and share it in one tap. The app stores report data and files on device by default. Optional encrypted cloud backup, real purchases, and AI assistance are designed behind interfaces for later phases, but the core app does not upload user photos or reports.
 
-## How to use
-1. Create a new repository.
-2. Copy `AGENTS.md` and the `docs/` folder into the repo.
-3. Open the repo with Codex.
-4. Start with Task 0 from `docs/CODEX_TASKS.md`.
-5. Review each diff before moving to the next task.
+## Tech stack
+
+- React Native + Expo
+- TypeScript
+- Expo Router
+- SQLite and local file storage for offline-first data
+- Expo ImagePicker, Location, Print, and Sharing for native workflows
+- Jest for pure logic tests
+
+## Development commands
+
+```bash
+npm install
+npm start
+npm run android
+npm run ios
+npm run web
+npm run typecheck
+npm run lint
+npm test
+```
+
+## Current structure
+
+- `app/` — Expo Router routes.
+- `src/types/` — core domain types.
+- `src/data/` — built-in report templates.
+- `src/entitlement/` — free/Pro entitlement rules and purchase abstractions.
+- `src/lib/` — shared utilities.
+- `docs/` — product, data model, launch, and QA documentation.
+
+## Freemium model
+
+- Free: 3 reports/month, PDF watermark, basic templates.
+- Pro Annual: target US$29.99/year, unlimited reports, no watermark, branding/logo.
+- Lifetime: one-time unlock target, unlimited reports, no watermark.
+
+The MVP uses a local entitlement abstraction so real App Store / Google Play purchases can be added later without changing the report or PDF flow.
 
