@@ -84,3 +84,18 @@ export async function addPhotoFromLibrary(reportId: string): Promise<StagedPhoto
 
   return stagePickedAsset(reportId, result.assets[0]);
 }
+
+export async function pickPhotoFromLibrary(): Promise<ImagePicker.ImagePickerAsset | null> {
+  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!permission.granted) {
+    throw new Error('Photo library permission is needed to choose an image. You can enable it in system settings.');
+  }
+
+  const result = await ImagePicker.launchImageLibraryAsync({
+    allowsMultipleSelection: false,
+    mediaTypes: ['images'],
+    quality: 0.9,
+  });
+
+  return result.canceled ? null : (result.assets[0] ?? null);
+}

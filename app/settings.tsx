@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { ENTITLEMENT_PLAN_SETTING_KEY } from '@/entitlement/localEntitlementProvider';
-import { LOCATION_STAMPING_SETTING_KEY } from '@/photos/photoService';
+import { LOCATION_STAMPING_SETTING_KEY, pickPhotoFromLibrary } from '@/photos/photoService';
 import { getAppSetting, setAppSetting } from '@/repositories/appSettingsRepository';
 import { getBrandingSettings, saveBrandingSettings } from '@/repositories/settingsRepository';
 import type { BrandingSettingsPatch } from '@/types/settings';
@@ -45,6 +45,17 @@ export default function SettingsScreen() {
     await setAppSetting(ENTITLEMENT_PLAN_SETTING_KEY, devPro ? 'pro_annual' : 'free');
     await setAppSetting(LOCATION_STAMPING_SETTING_KEY, locationStamping ? 'true' : 'false');
     Alert.alert('Saved', 'Branding and local entitlement settings are saved on this device.');
+  };
+
+  const chooseLogo = async () => {
+    try {
+      const picked = await pickPhotoFromLibrary();
+      if (picked) {
+        updateField('logoUri', picked.uri);
+      }
+    } catch (error) {
+      Alert.alert('Could not choose logo', error instanceof Error ? error.message : 'Please try again.');
+    }
   };
 
   return (
@@ -97,6 +108,10 @@ export default function SettingsScreen() {
           value={form.footerText ?? ''}
           onChangeText={(value) => updateField('footerText', value)}
         />
+        <Button variant="secondary" onPress={() => void chooseLogo()}>
+          {form.logoUri ? 'Change logo image' : 'Choose logo image'}
+        </Button>
+        {form.logoUri ? <Text style={styles.helper}>Logo selected: {form.logoUri}</Text> : null}
       </Card>
 
       <Card>
