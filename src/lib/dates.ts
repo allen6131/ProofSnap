@@ -29,6 +29,9 @@ export function formatDateTime(iso?: string | null): string {
   return DATE_TIME_FORMAT.format(date);
 }
 
+export const formatDisplayDate = formatDate;
+export const formatPhotoTimestamp = formatDateTime;
+
 export function formatDate(iso?: string | null): string {
   if (!iso) {
     return 'Not set';

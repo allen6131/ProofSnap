@@ -1,71 +1,158 @@
-import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Link, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-export default function HomeScreen() {
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
+import { Screen } from '@/components/Screen';
+import { getTemplateById } from '@/data/reportTemplates';
+import { formatDisplayDate } from '@/lib/dates';
+import { compactJoin } from '@/lib/format';
+import { listReports } from '@/repositories/reportRepository';
+import type { ReportWithPhotoCount } from '@/types/report';
+
+export default function ReportsIndexScreen() {
+  const [reports, setReports] = useState<ReportWithPhotoCount[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadReports = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      setReports(await listReports());
+    } catch {
+      setError('Could not load reports. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      void loadReports();
+    }, [loadReports]),
+  );
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.eyebrow}>ProofSnap</Text>
-      <Text style={styles.title}>Professional photo proof reports in seconds.</Text>
-      <Text style={styles.body}>
-        Capture timestamped job photos, organize notes by section, and export polished PDFs
-        while staying offline by default.
-      </Text>
-      <Link href="/reports/new" style={styles.primaryLink}>
-        Create your first report
+    <Screen scroll contentContainerStyle={styles.content}>
+      <View style={styles.header}>
+        <View>
+          <Text style={styles.eyebrow}>ProofSnap</Text>
+          <Text style={styles.title}>Reports</Text>
+        </View>
+        <Link href="/settings" style={styles.settingsLink}>
+          Settings
+        </Link>
+      </View>
+
+      <Link href="/reports/new" asChild>
+        <Button title="New Report" />
       </Link>
-      <Link href="/settings" style={styles.secondaryLink}>
-        Settings & branding
-      </Link>
-    </View>
+
+      {isLoading ? (
+        <ActivityIndicator color="#2563eb" style={styles.loader} />
+      ) : error ? (
+        <Card>
+          <Text style={styles.error}>{error}</Text>
+          <Button title="Retry" variant="secondary" onPress={loadReports} />
+        </Card>
+      ) : reports.length === 0 ? (
+        <Card>
+          <Text style={styles.emptyTitle}>Create your first photo proof report</Text>
+          <Text style={styles.emptyBody}>
+            Capture timestamped photos, add job notes, and export a professional PDF while
+            keeping everything stored on this device by default.
+          </Text>
+          <Link href="/reports/new" asChild>
+            <Button title="Create your first report" />
+          </Link>
+        </Card>
+      ) : (
+        reports.map((report) => {
+          const template = getTemplateById(report.templateId);
+          const subtitle = compactJoin([
+            template.name,
+            report.clientName,
+            report.propertyName,
+            `${report.photoCount} photo${report.photoCount === 1 ? '' : 's'}`,
+          ]);
+
+          return (
+            <Link key={report.id} href={`/reports/${report.id}`} asChild>
+              <Card pressable>
+                <Text style={styles.reportTitle}>{report.title}</Text>
+                <Text style={styles.reportSubtitle}>{subtitle}</Text>
+                <Text style={styles.reportDate}>Updated {formatDisplayDate(report.updatedAt)}</Text>
+              </Card>
+            </Link>
+          );
+        })
+      )}
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  body: {
-    color: '#475569',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 32,
-    textAlign: 'center',
+  content: {
+    gap: 16,
   },
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
+  emptyBody: {
+    color: '#475569',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 18,
+  },
+  emptyTitle: {
+    color: '#0f172a',
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 8,
+  },
+  error: {
+    color: '#b91c1c',
+    marginBottom: 12,
   },
   eyebrow: {
     color: '#2563eb',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 1.5,
-    marginBottom: 12,
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
-  primaryLink: {
-    backgroundColor: '#2563eb',
-    borderRadius: 12,
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 12,
-    overflow: 'hidden',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
+  header: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  secondaryLink: {
+  loader: {
+    padding: 32,
+  },
+  reportDate: {
+    color: '#64748b',
+    fontSize: 13,
+    marginTop: 10,
+  },
+  reportSubtitle: {
+    color: '#475569',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  reportTitle: {
+    color: '#0f172a',
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: 6,
+  },
+  settingsLink: {
     color: '#2563eb',
-    fontSize: 16,
-    fontWeight: '600',
-    padding: 12,
+    fontSize: 15,
+    fontWeight: '700',
+    padding: 8,
   },
   title: {
     color: '#0f172a',
-    fontSize: 32,
-    fontWeight: '800',
-    lineHeight: 38,
-    marginBottom: 16,
-    textAlign: 'center',
+    fontSize: 34,
+    fontWeight: '900',
   },
 });
