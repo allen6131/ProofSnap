@@ -6,7 +6,11 @@ import { Card } from '@/components/Card';
 import { Screen } from '@/components/Screen';
 import { ENTITLEMENT_PLAN_SETTING_KEY } from '@/entitlement/localEntitlementProvider';
 import { BackupSettingsSection } from '@/features/settings/BackupSettingsSection';
-import { LOCATION_STAMPING_SETTING_KEY, pickPhotoFromLibrary } from '@/photos/photoService';
+import { pickPhotoFromLibrary } from '@/photos/photoService';
+import {
+  isLocationStampingEnabled,
+  setLocationStampingEnabled,
+} from '@/photos/locationStamping';
 import { getAppSetting, setAppSetting } from '@/repositories/appSettingsRepository';
 import { getBrandingSettings, saveBrandingSettings } from '@/repositories/settingsRepository';
 import type { BrandingSettingsPatch } from '@/types/settings';
@@ -22,11 +26,11 @@ export default function SettingsScreen() {
     const [branding, plan, savedLocationStamping] = await Promise.all([
       getBrandingSettings(),
       getAppSetting(ENTITLEMENT_PLAN_SETTING_KEY),
-      getAppSetting(LOCATION_STAMPING_SETTING_KEY),
+      isLocationStampingEnabled(),
     ]);
     setForm(branding);
     setDevPro(plan === 'pro' || plan === 'pro_annual' || plan === 'lifetime');
-    setLocationStamping(savedLocationStamping === 'true');
+    setLocationStamping(savedLocationStamping);
     setLoading(false);
   }, []);
 
@@ -44,7 +48,7 @@ export default function SettingsScreen() {
   const save = async () => {
     await saveBrandingSettings(form);
     await setAppSetting(ENTITLEMENT_PLAN_SETTING_KEY, devPro ? 'pro_annual' : 'free');
-    await setAppSetting(LOCATION_STAMPING_SETTING_KEY, locationStamping ? 'true' : 'false');
+    await setLocationStampingEnabled(locationStamping);
     Alert.alert('Saved', 'Branding and local entitlement settings are saved on this device.');
   };
 
