@@ -17,3 +17,26 @@ export interface Report {
 export interface ReportWithPhotoCount extends Report {
   photoCount: number;
 }
+
+export interface CreateReportInput {
+  title: string;
+  templateId?: string | null;
+  clientName?: string | null;
+  propertyName?: string | null;
+  address?: string | null;
+  generalNotes?: string | null;
+}
+
+export type UpdateReportInput = Partial<
+  Pick<
+    Report,
+    | 'title'
+    | 'templateId'
+    | 'clientName'
+    | 'propertyName'
+    | 'address'
+    | 'generalNotes'
+    | 'status'
+    | 'completedAt'
+  >
+>;

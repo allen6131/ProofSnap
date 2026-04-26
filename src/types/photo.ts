@@ -12,3 +12,28 @@ export interface ReportPhoto {
   createdAt: string;
   sortOrder: number;
 }
+
+export interface CreateReportPhotoInput {
+  localUri: string;
+  fileName?: string | null;
+  caption?: string | null;
+  sectionLabel?: string | null;
+  takenAt?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  locationAccuracy?: number | null;
+  sortOrder?: number;
+}
+
+export type UpdateReportPhotoInput = Partial<
+  Pick<
+    ReportPhoto,
+    | 'caption'
+    | 'sectionLabel'
+    | 'takenAt'
+    | 'latitude'
+    | 'longitude'
+    | 'locationAccuracy'
+    | 'sortOrder'
+  >
+>;

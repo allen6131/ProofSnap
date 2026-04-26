@@ -1,4 +1,5 @@
 export interface BrandingSettings {
+  id: string;
   companyName?: string | null;
   contactName?: string | null;
   email?: string | null;
@@ -13,3 +14,10 @@ export interface AppSetting {
   key: string;
   value: string;
 }
+
+export type BrandingSettingsPatch = Partial<
+  Pick<
+    BrandingSettings,
+    'companyName' | 'contactName' | 'email' | 'phone' | 'website' | 'logoUri' | 'footerText'
+  >
+>;
