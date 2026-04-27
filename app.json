@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "ProofSnap",
+    "slug": "proofsnap",
+    "scheme": "proofsnap",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.proofsnap.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "ProofSnap needs camera access so you can capture timestamped report photos.",
+        "NSPhotoLibraryUsageDescription": "ProofSnap needs photo library access so you can import existing job or property photos.",
+        "NSLocationWhenInUseUsageDescription": "ProofSnap can optionally stamp report photos with your job location when you enable location stamping."
+      }
+    },
+    "android": {
+      "package": "com.proofsnap.app",
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES"
+      ]
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

@@ -1,7 +1,7 @@
-# ProofPack Product Brief
+# ProofSnap Product Brief
 
 ## One-sentence pitch
-ProofPack helps service workers create timestamped photo proof reports and export professional PDFs in seconds.
+ProofSnap helps service workers create timestamped photo proof reports and export professional PDFs in seconds.
 
 ## Primary customer
 Start with one narrow customer segment:
@@ -60,4 +60,10 @@ Secondary segments:
 - $19.99-$39.99 lifetime unlock
 
 For a solo side project, start with annual + lifetime unlock. Add monthly later only if users ask for it.
+
+## Competitor-informed positioning
+- Match the essentials users expect from Timemark: timestamps, optional GPS stamps, project/report organization, notes, cloud-backup readiness, and watermark removal in Pro.
+- Preserve the offline reliability of Cleaning Proof Photo Reports: reports, photos, and PDFs should work without an account or network connection.
+- Keep the simple watermark/pro unlock mental model users know from timestamp-camera apps, but differentiate with professional report organization and PDF export.
+- Treat bulk capture, ghost/guide overlays, reusable labels, and team workflows as post-MVP differentiators rather than core launch blockers.
 

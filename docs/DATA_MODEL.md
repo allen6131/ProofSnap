@@ -1,4 +1,4 @@
-# ProofPack Data Model
+# ProofSnap Data Model
 
 ## SQLite tables
 Use migrations. Keep migration code idempotent.
