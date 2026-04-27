@@ -1,7 +1,6 @@
 import express from 'express';
 
 import { errorHandler } from './middleware/errorHandler';
-import { requireAuth } from './middleware/auth';
 import { createReportRouter } from './routes/reportRoutes';
 import { getStores } from './stores/factory';
 
@@ -15,7 +14,7 @@ export const createApp = (): express.Express => {
   });
 
   const stores = getStores();
-  app.use('/api/report', requireAuth, createReportRouter(stores));
+  app.use('/api/report', createReportRouter(stores));
   app.use(errorHandler);
 
   return app;
