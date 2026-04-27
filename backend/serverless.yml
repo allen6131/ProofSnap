@@ -1,0 +1,52 @@
+service: proofsnap-backend
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ${env:AWS_REGION, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  architecture: arm64
+  memorySize: 512
+  timeout: 30
+  environment:
+    NODE_ENV: production
+    JWT_SECRET: ${env:JWT_SECRET}
+    STORE_PROVIDER: ${env:STORE_PROVIDER, 'memory'}
+    AI_MONTHLY_QUOTA_PRO: ${env:AI_MONTHLY_QUOTA_PRO, '75'}
+    AI_MONTHLY_QUOTA_FREE: ${env:AI_MONTHLY_QUOTA_FREE, '0'}
+    BACKUP_ENABLED_BY_DEFAULT: ${env:BACKUP_ENABLED_BY_DEFAULT, 'true'}
+    BACKUP_TABLE_NAME: ${env:BACKUP_TABLE_NAME, 'proofsnap-backups'}
+    USAGE_TABLE_NAME: ${env:USAGE_TABLE_NAME, 'proofsnap-ai-usage'}
+    ANALYSIS_TABLE_NAME: ${env:ANALYSIS_TABLE_NAME, 'proofsnap-analysis-results'}
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+          Resource:
+            - arn:aws:dynamodb:${aws:region}:*:table/${env:BACKUP_TABLE_NAME, 'proofsnap-backups'}
+            - arn:aws:dynamodb:${aws:region}:*:table/${env:USAGE_TABLE_NAME, 'proofsnap-ai-usage'}
+            - arn:aws:dynamodb:${aws:region}:*:table/${env:ANALYSIS_TABLE_NAME, 'proofsnap-analysis-results'}
+
+functions:
+  api:
+    handler: dist/lambda.handler
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: any
+
+package:
+  patterns:
+    - dist/**
+    - node_modules/**
+    - '!src/**'
+    - '!__tests__/**'
+
+plugins:
+  - serverless-offline
