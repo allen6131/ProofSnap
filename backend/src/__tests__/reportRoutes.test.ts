@@ -43,14 +43,11 @@ const analysisPayload = {
 };
 
 describe('report routes', () => {
-  let app: Awaited<ReturnType<typeof createApp>>;
-
-  beforeAll(async () => {
-    app = await createApp();
-  });
+  let app: ReturnType<typeof createApp>;
 
   beforeEach(() => {
     resetStoresForTests();
+    app = createApp();
   });
 
   it('returns auth error when authorization header is missing', async () => {
