@@ -7,24 +7,24 @@ from app.security.deps import get_current_user
 from app.security.jwt import create_access_token
 from app.services.auth_service import authenticate_user, register_user
 
-router = APIRouter(prefix='/auth', tags=['auth'])
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post('/register', response_model=AuthResponse)
+@router.post("/register", response_model=AuthResponse)
 def register(payload: RegisterRequest, db: Session = Depends(get_db)) -> AuthResponse:
     user = register_user(db, payload.email, payload.password)
     token = create_access_token(user.id, user.email, user.role)
     return AuthResponse(access_token=token)
 
 
-@router.post('/login', response_model=AuthResponse)
+@router.post("/login", response_model=AuthResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)) -> AuthResponse:
     user = authenticate_user(db, payload.email, payload.password)
     token = create_access_token(user.id, user.email, user.role)
     return AuthResponse(access_token=token)
 
 
-@router.get('/me', response_model=UserResponse)
+@router.get("/me", response_model=UserResponse)
 def me(user=Depends(get_current_user)) -> UserResponse:
     return UserResponse(
         id=user.id,
@@ -35,6 +35,6 @@ def me(user=Depends(get_current_user)) -> UserResponse:
     )
 
 
-@router.post('/logout')
+@router.post("/logout")
 def logout() -> dict:
-    return {'ok': True, 'note': 'JWT logout is client-side placeholder for MVP'}
+    return {"ok": True, "note": "JWT logout is client-side placeholder for MVP"}

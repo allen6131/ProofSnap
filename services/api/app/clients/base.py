@@ -11,7 +11,9 @@ class BaseHttpClient:
         self.timeout = timeout
         self.retries = retries
 
-    async def get_json(self, url: str, headers: dict[str, str] | None = None, params: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def get_json(
+        self, url: str, headers: dict[str, str] | None = None, params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         attempt = 0
         while True:
             try:
@@ -23,9 +25,11 @@ class BaseHttpClient:
                 attempt += 1
                 if attempt >= self.retries:
                     raise
-                await asyncio.sleep(2 ** attempt)
+                await asyncio.sleep(2**attempt)
 
-    async def get_text(self, url: str, headers: dict[str, str] | None = None, params: dict[str, Any] | None = None) -> str:
+    async def get_text(
+        self, url: str, headers: dict[str, str] | None = None, params: dict[str, Any] | None = None
+    ) -> str:
         attempt = 0
         while True:
             try:
@@ -37,4 +41,4 @@ class BaseHttpClient:
                 attempt += 1
                 if attempt >= self.retries:
                     raise
-                await asyncio.sleep(2 ** attempt)
+                await asyncio.sleep(2**attempt)

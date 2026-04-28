@@ -13,7 +13,7 @@ class UserProfileRequest(BaseModel):
     max_wave_height_ft: float = 2.0
     min_tide_height_ft_mllw: float | None = None
     daylight_only: bool = True
-    thunderstorm_policy: str = 'red'
+    thunderstorm_policy: str = "red"
     notify_good_windows: bool = True
     notify_alerts: bool = True
     notify_threshold_changes: bool = True

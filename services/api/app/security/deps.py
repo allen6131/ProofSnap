@@ -14,15 +14,17 @@ def get_current_user(
     db: Session = Depends(get_db),
 ) -> User:
     if not creds:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Not authenticated')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
     try:
         payload = decode_access_token(creds.credentials)
     except ValueError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token') from exc
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+        ) from exc
 
-    user = db.get(User, payload['sub'])
+    user = db.get(User, payload["sub"])
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='User not found')
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user
 
 
@@ -36,10 +38,10 @@ def get_optional_user(
         payload = decode_access_token(creds.credentials)
     except ValueError:
         return None
-    return db.get(User, payload['sub'])
+    return db.get(User, payload["sub"])
 
 
 def require_admin(user: User = Depends(get_current_user)) -> User:
-    if user.role != 'admin':
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Admin access required')
+    if user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     return user

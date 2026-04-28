@@ -47,13 +47,13 @@ def parse_nws_wind_string(raw: str | None) -> tuple[float | None, float | None, 
         return None, None, None
 
     text = raw.lower().strip()
-    unit = 'mph'
-    if ' kt' in text or text.endswith('kt'):
-        unit = 'kt'
-    elif ' km/h' in text or 'kph' in text:
-        unit = 'kmh'
-    elif ' m/s' in text:
-        unit = 'ms'
+    unit = "mph"
+    if " kt" in text or text.endswith("kt"):
+        unit = "kt"
+    elif " km/h" in text or "kph" in text:
+        unit = "kmh"
+    elif " m/s" in text:
+        unit = "ms"
 
     nums = [float(v) for v in re.findall(r"\d+(?:\.\d+)?", text)]
     if not nums:
@@ -62,10 +62,10 @@ def parse_nws_wind_string(raw: str | None) -> tuple[float | None, float | None, 
     low = nums[0]
     high = nums[1] if len(nums) > 1 else nums[0]
 
-    if unit == 'kt':
+    if unit == "kt":
         return round(low, 2), round(high, 2), unit
-    if unit == 'kmh':
+    if unit == "kmh":
         return kmh_to_kt(low), kmh_to_kt(high), unit
-    if unit == 'ms':
+    if unit == "ms":
         return ms_to_kt(low), ms_to_kt(high), unit
     return mph_to_kt(low), mph_to_kt(high), unit

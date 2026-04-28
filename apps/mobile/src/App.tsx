@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 
 import { AppNavigator } from './navigation/AppNavigator';
 import { AuthProvider } from './store/auth';
@@ -6,7 +6,7 @@ import { AuthProvider } from './store/auth';
 export default function App() {
   return (
     <AuthProvider>
-      <StatusBar style="dark" />
+      <StatusBar barStyle="dark-content" />
       <AppNavigator />
     </AuthProvider>
   );

@@ -6,14 +6,14 @@ from app.routers import admin, auth, health, profile, ramps, regions, source_deb
 
 settings = get_settings()
 
-app = FastAPI(title='RampReady API', version='0.1.0')
+app = FastAPI(title="RampReady API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in settings.cors_origins.split(',') if origin.strip()],
+    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(health.router)

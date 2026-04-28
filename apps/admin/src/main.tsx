@@ -20,23 +20,23 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<OverviewPage token={token} />} />
-          <Route path="ramps" element={<RampsPage token={token} />} />
-          <Route path="reports" element={<ReportsPage token={token} />} />
-          <Route path="jobs" element={<JobsPage token={token} />} />
-          <Route path="stations" element={<StationsPage token={token} />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<OverviewPage token={token} />} />
+        <Route path="ramps" element={<RampsPage token={token} />} />
+        <Route path="reports" element={<ReportsPage token={token} />} />
+        <Route path="jobs" element={<JobsPage token={token} />} />
+        <Route path="stations" element={<StationsPage token={token} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
   );
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
 );
