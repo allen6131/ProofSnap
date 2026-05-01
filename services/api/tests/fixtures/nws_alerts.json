@@ -1,0 +1,20 @@
+{
+  "features": [
+    {
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.test-alert-1",
+        "event": "Small Craft Advisory",
+        "headline": "Small Craft Advisory issued April 28",
+        "description": "Winds and seas hazardous to small craft.",
+        "instruction": "Exercise caution on open water.",
+        "severity": "Moderate",
+        "certainty": "Likely",
+        "urgency": "Immediate",
+        "areaDesc": "Tampa Bay and nearby Gulf waters",
+        "effective": "2026-04-28T05:00:00Z",
+        "expires": "2026-04-28T15:00:00Z",
+        "ends": "2026-04-28T15:00:00Z"
+      }
+    }
+  ]
+}

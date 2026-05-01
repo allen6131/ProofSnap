@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "periods": [
+      {
+        "number": 1,
+        "startTime": "2026-04-28T06:00:00Z",
+        "endTime": "2026-04-28T09:00:00Z",
+        "windSpeed": "10 to 15 mph",
+        "windGust": "20 mph",
+        "windDirection": "SE",
+        "probabilityOfPrecipitation": {
+          "value": 20
+        },
+        "shortForecast": "Partly Cloudy"
+      },
+      {
+        "number": 2,
+        "startTime": "2026-04-28T09:00:00Z",
+        "endTime": "2026-04-28T12:00:00Z",
+        "windSpeed": "12 mph",
+        "windGust": "18 mph",
+        "windDirection": "S",
+        "probabilityOfPrecipitation": {
+          "value": 10
+        },
+        "shortForecast": "Mostly Sunny"
+      }
+    ]
+  }
+}

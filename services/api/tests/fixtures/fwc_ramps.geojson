@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.626,
+          27.76
+        ]
+      },
+      "properties": {
+        "OBJECTID": 1,
+        "FACILITY": "Demens Landing Boat Ramp",
+        "ADDRESS": "100 2nd Ave NE",
+        "COUNTY": "Pinellas",
+        "CITY": "St Petersburg",
+        "LANES": 4,
+        "PARKING": "Large lot",
+        "FEE": "Paid",
+        "RESTROOM": 1,
+        "AGENCY": "City of St. Petersburg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.56,
+          27.71
+        ]
+      },
+      "properties": {
+        "OBJECTID": 2,
+        "FACILITY": "Coquina Key Ramp",
+        "ADDRESS": "Elmira St S",
+        "COUNTY": "Pinellas",
+        "CITY": "St Petersburg",
+        "LANES": 2,
+        "PARKING": "Limited",
+        "FEE": "Free",
+        "RESTROOM": 0,
+        "AGENCY": "Pinellas County"
+      }
+    }
+  ]
+}
