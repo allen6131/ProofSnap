@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from 'react';
 
+import { ChatScreen } from '../screens/ChatScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { RampDetailScreen } from '../screens/RampDetailScreen';
@@ -35,6 +36,7 @@ function MainTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Chat" component={ChatScreen} options={{ title: 'Ask' }} />
       <Tab.Screen name="Ramps" component={RampsStack} />
       <Tab.Screen name="Saved" component={SavedScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />

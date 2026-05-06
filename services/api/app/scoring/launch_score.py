@@ -16,7 +16,6 @@ from app.models.entities import (
     WeatherForecast,
 )
 
-
 @dataclass
 class Thresholds:
     max_wind_kt: float
@@ -128,6 +127,14 @@ def _reason(
     if threshold is not None:
         payload["threshold"] = threshold
     return payload
+
+
+def _is_beginner_daylight_window(starts_at: datetime, ends_at: datetime) -> bool:
+    # Conservative fixed approximation for Tampa Bay MVP. This avoids adding a location/timezone
+    # dependency while preventing beginner guidance from treating pre-dawn/night windows as ideal.
+    local_start_hour = (starts_at.astimezone(timezone.utc).hour - 5) % 24
+    local_end_hour = (ends_at.astimezone(timezone.utc).hour - 5) % 24
+    return local_start_hour >= 7 and local_end_hour <= 20 and local_start_hour < local_end_hour
 
 
 def _evaluate_color(
@@ -462,6 +469,18 @@ def build_launch_windows(
             alerts=alerts,
             ramp=ramp,
         )
+        if thresholds.daylight_only and not _is_beginner_daylight_window(w_start, w_end):
+            reasons.append(
+                _reason(
+                    "caution",
+                    "outside_daylight",
+                    "This window is outside conservative daylight hours for beginner planning.",
+                    "rampready",
+                )
+            )
+            if color == "green":
+                color = "yellow"
+                score = min(score, 60.0)
 
         def age_minutes(dt: datetime | None) -> int | None:
             dt_utc = _ensure_utc(dt)

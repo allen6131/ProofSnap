@@ -20,6 +20,13 @@ class Settings(BaseSettings):
     )
     enable_open_meteo: bool = Field(default=False, alias="ENABLE_OPEN_METEO")
     open_meteo_api_key: str | None = Field(default=None, alias="OPEN_METEO_API_KEY")
+    openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
+    openai_model: str = Field(default="gpt-4o-mini", alias="OPENAI_MODEL")
+    chat_enabled: bool = Field(default=True, alias="CHAT_ENABLED")
+    chat_candidate_limit: int = Field(default=5, alias="CHAT_CANDIDATE_LIMIT")
+    chat_source_timeout_seconds: float = Field(default=8.0, alias="CHAT_SOURCE_TIMEOUT_SECONDS")
+    chat_openai_timeout_seconds: float = Field(default=20.0, alias="CHAT_OPENAI_TIMEOUT_SECONDS")
+    chat_use_openai_in_tests: bool = Field(default=False, alias="CHAT_USE_OPENAI_IN_TESTS")
     default_region: str = Field(default="tampa-bay", alias="DEFAULT_REGION")
     cors_origins: str = Field(
         default="http://localhost:5173,http://localhost:19006", alias="CORS_ORIGINS"

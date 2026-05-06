@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status
 from sqlalchemy import and_, func, or_, select
@@ -154,9 +154,20 @@ def create_ramp_report(
 
 
 def get_launch_windows(
-    db: Session, ramp_id: str, profile_id: str | None = None, days: int = 7
+    db: Session,
+    ramp_id: str,
+    profile_id: str | None = None,
+    days: int = 7,
+    force_recompute: bool = False,
 ) -> list[LaunchScore]:
     ramp = get_ramp_or_404(db, ramp_id)
+
+    if force_recompute:
+        db.query(LaunchScore).filter(
+            LaunchScore.ramp_id == ramp.id,
+            LaunchScore.user_profile_id == profile_id,
+        ).delete(synchronize_session=False)
+        db.flush()
 
     existing = list(
         db.scalars(
@@ -165,8 +176,25 @@ def get_launch_windows(
             .order_by(LaunchScore.starts_at.asc())
         )
     )
-    if existing:
+    stale_cutoff = datetime.now(timezone.utc) - timedelta(hours=2)
+    has_fresh_today_score = any(
+        (
+            score.created_at
+            if score.created_at.tzinfo
+            else score.created_at.replace(tzinfo=timezone.utc)
+        )
+        >= stale_cutoff
+        for score in existing
+    )
+    if existing and has_fresh_today_score:
         return existing
+
+    if existing:
+        db.query(LaunchScore).filter(
+            LaunchScore.ramp_id == ramp.id,
+            LaunchScore.user_profile_id == profile_id,
+        ).delete(synchronize_session=False)
+        db.flush()
 
     windows = build_launch_windows(db=db, ramp=ramp, user_profile_id=profile_id, days=days)
     db.add_all(windows)
