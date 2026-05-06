@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from app.models.entities import Alert, Observation, Ramp, Station, TidePrediction, UserProfile, WeatherForecast
-from app.services.chat_recommendation_service import infer_intent
+from app.models.entities import Ramp, UserProfile, WeatherForecast
 
 
 def _register_token(client, email="chat@example.com"):

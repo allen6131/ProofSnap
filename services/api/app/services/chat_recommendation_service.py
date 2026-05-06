@@ -18,7 +18,7 @@ from app.schemas.chat import (
     ChatSpotRecommendation,
 )
 from app.services.openai_service import generate_chat_recommendation_text
-from app.services.ramp_service import get_launch_windows, get_ramp_conditions, list_ramps
+from app.services.ramp_service import get_launch_windows, list_ramps
 from app.services.source_sync import refresh_ramp_sources
 
 
