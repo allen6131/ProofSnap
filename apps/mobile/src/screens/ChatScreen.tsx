@@ -4,7 +4,7 @@ import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View } from 
 import { apiRequest } from '../api/client';
 import { StatusChip } from '../components/StatusChip';
 import { useAuth } from '../store/auth';
-import { ChatRecommendationResponse } from '../types';
+import { ChatRecommendationRequest, ChatRecommendationResponse } from '../types';
 
 const API_ERROR_PREFIX = 'Error: ';
 const defaultQuestion = 'where is the best spot to go fishing/boating today';
@@ -30,7 +30,7 @@ export function ChatScreen() {
         '/chat/recommendations',
         {
           method: 'POST',
-          body: JSON.stringify({ message: message.trim() }),
+          body: JSON.stringify({ message: message.trim() } satisfies ChatRecommendationRequest),
         },
         token,
       );
