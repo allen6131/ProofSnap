@@ -16,7 +16,7 @@ class CoopsClient(BaseHttpClient):
 
     async def get_data(self, **params: Any) -> dict[str, Any]:
         base = {
-            "application": "RampReady",
+            "application": "rampready",
             "format": "json",
             "units": "english",
             "time_zone": "gmt",

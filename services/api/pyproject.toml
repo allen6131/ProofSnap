@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rampready-api"
 version = "0.1.0"
-description = "RampReady MVP backend API"
+description = "rampready MVP backend API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

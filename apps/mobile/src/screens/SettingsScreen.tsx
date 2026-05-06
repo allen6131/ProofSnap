@@ -47,6 +47,9 @@ export function SettingsScreen() {
   return (
     <ScrollView style={{ flex: 1, padding: 16 }}>
       <Text style={{ fontSize: 24, fontWeight: '700', marginBottom: 10 }}>Settings</Text>
+      <Text style={{ color: '#4a5568', marginBottom: 12 }}>
+        Tune rampready to the boat you are learning on and the conditions you are comfortable launching in.
+      </Text>
       <Text style={{ fontWeight: '700' }}>Boat type</Text>
       <TextInput value={boatType} onChangeText={setBoatType} style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10, marginBottom: 8 }} />
 
@@ -76,7 +79,7 @@ export function SettingsScreen() {
       </Pressable>
 
       <Text style={{ marginTop: 14, fontSize: 12, color: '#718096' }}>
-        RampReady is a planning and awareness tool only. It is not a navigation tool, not an emergency service, and not a substitute for official marine forecasts, nautical charts, local knowledge, or safe boating judgment. Weather, tide, water-level, current, buoy, and ramp information may be delayed, incomplete, preliminary, or inaccurate. Always check official NOAA/NWS sources and local conditions before launching.
+        rampready is a planning and awareness tool only. It is not a navigation tool, not an emergency service, and not a substitute for official marine forecasts, nautical charts, local knowledge, or safe boating judgment. Weather, tide, water-level, current, buoy, and ramp information may be delayed, incomplete, preliminary, or inaccurate. Always check official NOAA/NWS sources and local conditions before launching.
       </Text>
     </ScrollView>
   );

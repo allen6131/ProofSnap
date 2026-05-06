@@ -25,7 +25,7 @@ def run_seed() -> None:
             db.flush()
             db.add(
                 UserProfile(
-                    user_id=admin.id, display_name="RampReady Admin", boat_type="center_console"
+                    user_id=admin.id, display_name="rampready Admin", boat_type="center_console"
                 )
             )
 

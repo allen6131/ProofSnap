@@ -19,7 +19,7 @@
 - Recommended params:
   - `units=english`
   - `format=json`
-  - `application=RampReady`
+  - `application=rampready`
   - `time_zone=lst_ldt` for user-facing tide output
   - `datum=MLLW`
 
@@ -54,4 +54,4 @@
 
 ## Attribution and confidence
 - Launch score responses include source names, timestamps, freshness, and confidence labels.
-- Computed launch colors are RampReady outputs, not official NOAA/NWS recommendations.
+- Computed launch colors are rampready outputs, not official NOAA/NWS recommendations.

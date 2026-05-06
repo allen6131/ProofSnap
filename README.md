@@ -1,6 +1,6 @@
-# RampReady MVP
+# rampready MVP
 
-RampReady helps trailer boaters answer one practical question before towing to the water:
+rampready helps people new to boating answer one practical question before towing to the water:
 
 **"Is this ramp a good place to launch from during this time window?"**
 
@@ -51,6 +51,26 @@ Creates:
 ### 6) Import FWC ramps
 ```bash
 make import-fwc
+```
+
+### Local fallback without Docker
+If Docker is not installed, you can run a lightweight local API against SQLite for development:
+
+```bash
+brew install python@3.12
+cd services/api
+/opt/homebrew/bin/python3.12 -m venv .venv
+. .venv/bin/activate
+pip install -e '.[dev]'
+DATABASE_URL="sqlite+pysqlite:///./rampready.local.db" python -c "from app.db import Base, engine, SessionLocal; from app.jobs.seed import run_seed; from app.services.importers import import_fwc_ramps; Base.metadata.create_all(bind=engine); run_seed(); db=SessionLocal(); print(import_fwc_ramps(db, use_fixture=True)); db.close()"
+DATABASE_URL="sqlite+pysqlite:///./rampready.local.db" uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Then run:
+
+```bash
+cd apps/admin && VITE_API_BASE_URL=http://localhost:8000 npm run dev -- --host 127.0.0.1 --port 5173
+cd apps/mobile && EXPO_PUBLIC_API_BASE_URL=http://localhost:8000 npm run start -- --localhost
 ```
 
 ## Running services
@@ -105,7 +125,7 @@ See `docs/DISCLAIMER.md`.
 
 Required text:
 
-> RampReady is a planning and awareness tool only. It is not a navigation tool, not an emergency service, and not a substitute for official marine forecasts, nautical charts, local knowledge, or safe boating judgment. Weather, tide, water-level, current, buoy, and ramp information may be delayed, incomplete, preliminary, or inaccurate. Always check official NOAA/NWS sources and local conditions before launching.
+> rampready is a planning and awareness tool only. It is not a navigation tool, not an emergency service, and not a substitute for official marine forecasts, nautical charts, local knowledge, or safe boating judgment. Weather, tide, water-level, current, buoy, and ramp information may be delayed, incomplete, preliminary, or inaccurate. Always check official NOAA/NWS sources and local conditions before launching.
 
 ## Testing
 

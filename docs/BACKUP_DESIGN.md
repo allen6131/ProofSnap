@@ -1,22 +1,21 @@
-# ProofSnap encrypted backup design
+# rampready data and caching design
 
-ProofSnap is offline-first. Reports, photos, PDFs, branding, and entitlement settings stay on the
-device unless a user explicitly opts into backup later.
+rampready is API-backed in the MVP. User profiles, saved ramps, source data, launch scores, and
+admin curation live in the backend database.
 
 ## MVP status
 
-- No automatic upload is implemented.
-- No account is required.
-- Settings explain that encrypted cloud backup is a future opt-in Pro feature.
-- Backup code is limited to provider interfaces so future cloud storage can be added without
-  changing report repositories or PDF generation.
+- No photo, location-track, or navigation recording feature is implemented.
+- Mobile users sign in so saved ramps and launch preferences can sync through the API.
+- Source data is fetched from official providers or local fixtures and stored for scoring.
+- Offline mobile caching is not yet implemented.
 
-## Future backup requirements
+## Future offline requirements
 
-1. Create a backup manifest that lists the SQLite database export plus report photo/PDF files.
-2. Encrypt the archive on-device before it leaves local storage.
-3. Store encryption material in platform secure storage or derive it from a user passphrase.
-4. Upload only encrypted bytes to the selected provider.
-5. Add explicit restore, conflict-resolution, and last-backup status UI.
+1. Cache saved ramps and recent launch windows on device.
+2. Clearly mark cached data with last-updated timestamps.
+3. Never imply cached data is safe for current launch decisions.
+4. Revalidate source data before presenting fresh scores.
+5. Keep cache logic separate from launch scoring and source ingestion.
 
-Cloud-provider code must remain behind the `BackupProvider` interface.
+Offline support should improve planning convenience without weakening the planning-only disclaimer.

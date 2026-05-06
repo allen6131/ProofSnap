@@ -23,8 +23,10 @@ export function LoginScreen({ onToggle }: { onToggle: () => void }) {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 20, gap: 12 }}>
-      <Text style={{ fontSize: 28, fontWeight: '800' }}>RampReady</Text>
-      <Text style={{ color: '#4a5568' }}>Simple launch-window guidance before you tow.</Text>
+      <Text style={{ fontSize: 28, fontWeight: '800' }}>rampready</Text>
+      <Text style={{ color: '#4a5568' }}>
+        Beginner-friendly ramp, weather, tide, and launch-window guidance before you tow.
+      </Text>
       <TextInput value={email} onChangeText={setEmail} placeholder="Email" autoCapitalize="none" style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10 }} />
       <TextInput value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10 }} />
       <Pressable onPress={login} style={{ backgroundColor: '#1a202c', borderRadius: 8, padding: 12 }}>
@@ -34,7 +36,7 @@ export function LoginScreen({ onToggle }: { onToggle: () => void }) {
         <Text style={{ color: '#2b6cb0', textAlign: 'center' }}>No account? Register</Text>
       </Pressable>
       <Text style={{ fontSize: 12, color: '#718096', marginTop: 12 }}>
-        For planning only. Not for navigation, emergency, or safety-critical use.
+        For launch planning only. Not for navigation, emergency, or safety-critical use.
       </Text>
     </View>
   );

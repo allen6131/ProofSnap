@@ -6,7 +6,7 @@ from app.routers import admin, auth, health, profile, ramps, regions, source_deb
 
 settings = get_settings()
 
-app = FastAPI(title="RampReady API", version="0.1.0")
+app = FastAPI(title="rampready API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,

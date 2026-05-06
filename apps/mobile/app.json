@@ -1,12 +1,15 @@
 {
   "expo": {
-    "name": "RampReady",
+    "name": "rampready",
     "slug": "rampready",
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      "expo-asset"
     ]
   }
 }

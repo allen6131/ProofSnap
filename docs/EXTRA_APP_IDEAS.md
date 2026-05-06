@@ -31,7 +31,7 @@ Add pet/client, take photos, mark food/water/walk/medicine/checklist, export/sha
 Low to medium.
 
 ## 3. Move-In Damage Log
-A tenant-focused version of ProofSnap for documenting apartment condition before move-in and after move-out.
+A tenant-focused documentation app for apartment condition before move-in and after move-out.
 
 ### Core flow
 Room-by-room checklist, photo evidence, notes, timestamped PDF export.
@@ -58,7 +58,7 @@ A recurring checklist app for small service businesses where each checklist item
 - Pro: unlimited checklists, PDF export, branding
 
 ### Maintenance level
-Low, but broader than ProofSnap.
+Low, but broader than rampready.
 
 ## 5. Simple Mileage + Receipt PDF
 A very simple mileage and expense capture tool for independent contractors.
@@ -82,5 +82,5 @@ Parents photograph kids' artwork, auto-crop lightly, organize by child/year, and
 Low.
 
 ## Best alternate pick
-If ProofSnap feels too business-focused, build **Warranty Vault Lite**. It is simpler, more consumer-friendly, and can be almost entirely local. The tradeoff is that consumers are usually less willing to pay than business users.
+If rampready feels too dependent on external data sources, build **Warranty Vault Lite**. It is simpler, more consumer-friendly, and can be almost entirely local. The tradeoff is that consumers are usually less willing to pay than business users.
 

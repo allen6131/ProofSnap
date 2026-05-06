@@ -20,10 +20,13 @@ export function RampsScreen({ onSelect }: { onSelect: (rampId: string) => void }
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <Text style={{ fontSize: 24, fontWeight: '700', marginBottom: 10 }}>Ramps</Text>
+      <Text style={{ color: '#4a5568', marginBottom: 10 }}>
+        Find launch ramps and check whether conditions look approachable for newer boaters.
+      </Text>
       <TextInput
         value={query}
         onChangeText={setQuery}
-        placeholder="Search ramps"
+        placeholder="Search by ramp, city, or area"
         style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10, marginBottom: 10 }}
       />
       <Pressable onPress={load} style={{ backgroundColor: '#2b6cb0', borderRadius: 8, padding: 10, marginBottom: 10 }}>
