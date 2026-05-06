@@ -10,6 +10,7 @@ from app.clients.ndbc_client import NdbcClient, load_ndbc_fixture
 from app.clients.nws_client import NWSClient, load_nws_fixture
 from app.models.entities import Alert, Observation, Ramp, Station, TidePrediction, WeatherForecast
 from app.services.async_utils import run_coro_sync
+from app.services.station_linking import ensure_default_tampa_bay_stations, nearest_station
 
 
 def _parse_coops_time(value: str) -> datetime:
@@ -18,6 +19,7 @@ def _parse_coops_time(value: str) -> datetime:
 
 async def refresh_ramp_sources_async(db: Session, ramp: Ramp, use_fixture: bool = False) -> dict:
     now = datetime.now(timezone.utc)
+    ensure_default_tampa_bay_stations(db)
 
     if use_fixture:
         hourly_payload = load_nws_fixture("nws_grid.json")
@@ -103,12 +105,11 @@ async def refresh_ramp_sources_async(db: Session, ramp: Ramp, use_fixture: bool 
         )
         db.add(alert)
 
-    station = db.scalar(
-        select(Station).where(
-            Station.provider == "coops",
-            Station.provider_station_id == "8726520",
-            Station.station_type == "tide",
-        )
+    station = nearest_station(
+        db,
+        ramp,
+        provider="coops",
+        station_type="tide",
     )
     if not station:
         station = Station(
@@ -156,12 +157,11 @@ async def refresh_ramp_sources_async(db: Session, ramp: Ramp, use_fixture: bool 
         )
         db.add(pred)
 
-    buoy_station = db.scalar(
-        select(Station).where(
-            Station.provider == "ndbc",
-            Station.provider_station_id == "41002",
-            Station.station_type == "buoy",
-        )
+    buoy_station = nearest_station(
+        db,
+        ramp,
+        provider="ndbc",
+        station_type="buoy",
     )
     if not buoy_station:
         buoy_station = Station(
