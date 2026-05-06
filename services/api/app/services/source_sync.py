@@ -9,24 +9,14 @@ from app.clients.coops_client import CoopsClient, load_coops_fixture
 from app.clients.ndbc_client import NdbcClient, load_ndbc_fixture
 from app.clients.nws_client import NWSClient, load_nws_fixture
 from app.models.entities import Alert, Observation, Ramp, Station, TidePrediction, WeatherForecast
-from app.services.async_utils import run_async_blocking
+from app.services.async_utils import run_coro_sync
 
 
 def _parse_coops_time(value: str) -> datetime:
     return datetime.fromisoformat(value.replace(" ", "T") + "+00:00").astimezone(timezone.utc)
 
 
-def _run_source_coro(coro):
-    try:
-        return run_async_blocking(coro)
-    except Exception:
-        close = getattr(coro, "close", None)
-        if close:
-            close()
-        raise
-
-
-def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> dict:
+async def refresh_ramp_sources_async(db: Session, ramp: Ramp, use_fixture: bool = False) -> dict:
     now = datetime.now(timezone.utc)
 
     if use_fixture:
@@ -35,13 +25,13 @@ def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> 
     else:
         nws = NWSClient()
         try:
-            points = _run_source_coro(nws.get_points(float(ramp.latitude), float(ramp.longitude)))
+            points = await nws.get_points(float(ramp.latitude), float(ramp.longitude))
             props = points.get("properties", {})
             grid_id = props.get("gridId", "TBW")
             grid_x = props.get("gridX", 80)
             grid_y = props.get("gridY", 62)
-            hourly_payload = _run_source_coro(nws.get_hourly(grid_id, grid_x, grid_y))
-            alert_payload = _run_source_coro(nws.get_alerts(float(ramp.latitude), float(ramp.longitude)))
+            hourly_payload = await nws.get_hourly(grid_id, grid_x, grid_y)
+            alert_payload = await nws.get_alerts(float(ramp.latitude), float(ramp.longitude))
         except Exception:
             hourly_payload = load_nws_fixture("nws_grid.json")
             alert_payload = load_nws_fixture("nws_alerts.json")
@@ -140,13 +130,11 @@ def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> 
         begin_date = now.strftime("%Y%m%d")
         end_date = (now.replace(hour=23, minute=59, second=59)).strftime("%Y%m%d")
         try:
-            coops_payload = _run_source_coro(
-                coops.get_predictions(
-                    station.provider_station_id,
-                    begin_date=begin_date,
-                    end_date=end_date,
-                    datum="MLLW",
-                )
+            coops_payload = await coops.get_predictions(
+                station.provider_station_id,
+                begin_date=begin_date,
+                end_date=end_date,
+                datum="MLLW",
             )
         except Exception:
             coops_payload = load_coops_fixture("coops_predictions.json")
@@ -194,8 +182,8 @@ def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> 
         spec = load_ndbc_fixture("ndbc_41002.spec")
     else:
         try:
-            txt = _run_source_coro(ndbc.get_station_txt(str(buoy_station.provider_station_id)))
-            spec = _run_source_coro(ndbc.get_station_spec(str(buoy_station.provider_station_id)))
+            txt = await ndbc.get_station_txt(str(buoy_station.provider_station_id))
+            spec = await ndbc.get_station_spec(str(buoy_station.provider_station_id))
         except Exception:
             txt = load_ndbc_fixture("ndbc_41002.txt")
             spec = load_ndbc_fixture("ndbc_41002.spec")
@@ -246,3 +234,7 @@ def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> 
         "tide_predictions_count": len(coops_payload.get("predictions", [])),
         "ndbc_observation": bool(parsed_txt),
     }
+
+
+def refresh_ramp_sources(db: Session, ramp: Ramp, use_fixture: bool = False) -> dict:
+    return run_coro_sync(refresh_ramp_sources_async(db, ramp, use_fixture=use_fixture))

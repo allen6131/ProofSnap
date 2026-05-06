@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
-from app.models.entities import Ramp, UserProfile, WeatherForecast
+from app.models.entities import Observation, Ramp, Station, UserProfile, WeatherForecast
 
 
 def _register_token(client, email="chat@example.com"):
@@ -71,43 +71,72 @@ def test_chat_ranks_red_candidate_below_safer_candidate(client, db_session):
         state="FL",
         confidence_score=95,
     )
-    db_session.add_all([safe, windy])
+    station = Station(
+        provider="ndbc",
+        provider_station_id="test-buoy",
+        station_type="buoy",
+        name="Test Buoy",
+    )
+    db_session.add_all([safe, windy, station])
     db_session.flush()
     profile = db_session.query(UserProfile).first()
-    now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
-    db_session.add(
-        WeatherForecast(
-            ramp_id=safe.id,
-            source="NWS forecastGridData",
-            valid_time=now,
-            valid_until=now + timedelta(hours=3),
-            wind_speed_kt=5,
-            wind_gust_kt=8,
-            wave_height_ft=0.5,
-            created_at=now,
-        )
+    now = (datetime.now(timezone.utc) + timedelta(hours=1)).replace(
+        minute=0, second=0, microsecond=0
     )
+    for offset in range(8):
+        valid_time = now + timedelta(hours=3 * offset)
+        db_session.add(
+            WeatherForecast(
+                ramp_id=safe.id,
+                source="NWS forecastGridData",
+                valid_time=valid_time,
+                valid_until=valid_time + timedelta(hours=3),
+                wind_speed_kt=5,
+                wind_gust_kt=8,
+                wave_height_ft=0.5,
+                created_at=now,
+            )
+        )
+        db_session.add(
+            WeatherForecast(
+                ramp_id=windy.id,
+                source="NWS forecastGridData",
+                valid_time=valid_time,
+                valid_until=valid_time + timedelta(hours=3),
+                wind_speed_kt=30,
+                wind_gust_kt=35,
+                wave_height_ft=4,
+                created_at=now,
+            )
+        )
     db_session.add(
-        WeatherForecast(
-            ramp_id=windy.id,
-            source="NWS forecastGridData",
-            valid_time=now,
-            valid_until=now + timedelta(hours=3),
-            wind_speed_kt=30,
-            wind_gust_kt=35,
-            wave_height_ft=4,
-            created_at=now,
+        Observation(
+            station_id=station.id,
+            source="ndbc",
+            observed_at=now,
+            wind_gust_kt=6,
+            wave_height_ft=0.4,
         )
     )
     if profile:
         profile.daylight_only = False
     db_session.commit()
 
-    res = client.post(
-        "/chat/recommendations",
-        json={"message": "which ramp looks safest for boating today", "candidate_limit": 2},
-        headers={"Authorization": f"Bearer {token}"},
-    )
+    import app.services.chat_recommendation_service as service_module
+
+    async def no_refresh(*args, **kwargs):
+        return {"skipped": True}
+
+    original_refresh = service_module.refresh_ramp_sources_async
+    service_module.refresh_ramp_sources_async = no_refresh
+    try:
+        res = client.post(
+            "/chat/recommendations",
+            json={"message": "which ramp looks safest for boating today", "candidate_limit": 2},
+            headers={"Authorization": f"Bearer {token}"},
+        )
+    finally:
+        service_module.refresh_ramp_sources_async = original_refresh
     assert res.status_code == 200, res.text
     names = [rec["name"] for rec in res.json()["recommendations"]]
     assert names.index("Safer Ramp") < names.index("Windy Ramp")

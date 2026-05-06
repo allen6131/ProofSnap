@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.clients.fdoh_client import FdohClient
 from app.config import get_settings
-from app.models.entities import LaunchScore, Ramp, User
+from app.models.entities import LaunchScore, Observation, Ramp, User, WeatherForecast
 from app.schemas.chat import (
     ChatBestWindow,
     ChatIntent,
@@ -19,7 +19,7 @@ from app.schemas.chat import (
 )
 from app.services.openai_service import generate_chat_recommendation_text
 from app.services.ramp_service import get_launch_windows, list_ramps
-from app.services.source_sync import refresh_ramp_sources
+from app.services.source_sync import refresh_ramp_sources_async
 
 
 DISCLAIMER = (
@@ -120,12 +120,30 @@ def _best_window(windows: list[LaunchScore]) -> LaunchScore | None:
     )
 
 
-def _rank_fit_score(ramp: Ramp, window: LaunchScore | None, intent: ChatIntent) -> float:
+def _rank_fit_score(
+    db: Session, ramp: Ramp, window: LaunchScore | None, intent: ChatIntent
+) -> float:
     if not window:
         return max(0.0, float(ramp.confidence_score or 0) * 0.2)
     color_points = {"green": 100.0, "yellow": 70.0, "gray": 35.0, "red": 5.0}
     score = color_points.get(window.color, 0.0)
-    score += float(window.confidence_score or 0) * 0.35
+    confidence = float(window.confidence_score or 0)
+    latest_observation = db.scalar(select(Observation).order_by(Observation.observed_at.desc()).limit(1))
+    obs_age = _freshness_minutes(latest_observation.observed_at if latest_observation else None)
+    if latest_observation and obs_age is not None and obs_age <= 180:
+        if (
+            latest_observation.wind_gust_kt is not None
+            and float(latest_observation.wind_gust_kt) > 22
+        ):
+            confidence = max(0.0, confidence - 35.0)
+            score -= 45.0
+        if (
+            latest_observation.wave_height_ft is not None
+            and float(latest_observation.wave_height_ft) > 2.0
+        ):
+            confidence = max(0.0, confidence - 30.0)
+            score -= 40.0
+    score += confidence * 0.35
     score += min(float(ramp.confidence_score or 0), 100.0) * 0.15
     if ramp.manually_verified_at:
         score += 5.0
@@ -202,9 +220,19 @@ class ChatRecommendationService:
                 FWC_REGULATIONS_SOURCE
             )
 
+        skip_test_refresh = settings.app_env == "test" and any(
+            self._has_scoring_inputs(db, candidate) for candidate in candidates
+        )
+
         for ramp in candidates:
             try:
-                refresh_ramp_sources(db, ramp, use_fixture=settings.app_env == "test")
+                should_refresh = not skip_test_refresh and (
+                    settings.app_env != "test" or not self._has_scoring_inputs(db, ramp)
+                )
+                if should_refresh:
+                    await refresh_ramp_sources_async(
+                        db, ramp, use_fixture=settings.app_env == "test"
+                    )
             except Exception:
                 warnings.append(f"Some live source refreshes failed for {ramp.name}; cached data was used.")
 
@@ -248,7 +276,7 @@ class ChatRecommendationService:
                 latitude=float(ramp.latitude),
                 longitude=float(ramp.longitude),
                 rank=0,
-                fit_score=_rank_fit_score(ramp, best, intent),
+                fit_score=_rank_fit_score(db, ramp, best, intent),
                 launch_color=(best.color if best else "gray"),  # type: ignore[arg-type]
                 confidence_score=int(best.confidence_score if best else ramp.confidence_score),
                 best_window=(
@@ -305,6 +333,16 @@ class ChatRecommendationService:
             sources=sorted(global_sources.values(), key=lambda c: (c.provider, c.name)),
             suggested_followups=summary.suggested_followups,
             used_openai=summary.used_openai,
+        )
+
+    def _has_scoring_inputs(self, db: Session, ramp: Ramp) -> bool:
+        return (
+            db.scalar(select(LaunchScore.id).where(LaunchScore.ramp_id == ramp.id).limit(1))
+            is not None
+            or db.scalar(
+                select(WeatherForecast.id).where(WeatherForecast.ramp_id == ramp.id).limit(1)
+            )
+            is not None
         )
 
     def _build_source_cards(self, best: LaunchScore | None) -> list[ChatSourceCard]:
