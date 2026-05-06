@@ -11,6 +11,7 @@ The first version should be intentionally small:
 6. Beginner-friendly launch-window scoring
 7. Ramp issue reporting
 8. Admin curation tools
+9. Source-backed boating/fishing chat recommendations
 
 ## Ramp search
 ### Requirements
@@ -73,6 +74,16 @@ The first version should be intentionally small:
 - State that rampready is planning-only.
 - Do not present scores as official NOAA/NWS recommendations.
 - Encourage users to check official sources and local conditions before launching.
+
+## Source-backed chat recommendations
+### Requirements
+- Signed-in users can ask questions such as “where is the best spot to go fishing/boating today?”
+- The backend gathers and ranks ramp/conditions context before calling OpenAI.
+- OpenAI is only used for plain-language explanation from the supplied context; it must not invent source facts or call arbitrary APIs.
+- If OpenAI is unavailable or no API key is configured, return deterministic fallback guidance.
+- Recommendations include ranked ramps/spots, launch color, confidence, source cards, missing-data notes, warnings, and the planning-only disclaimer.
+- Fishing answers must be framed as access/conditions guidance, not catch predictions, and must point users to official FWC rules.
+- The app must not request device location automatically.
 
 ## Entitlement placeholder
 Build the app so real purchases can be added later.

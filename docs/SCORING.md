@@ -60,6 +60,18 @@ Starts at 100 and subtracts penalties:
 - Missing critical weather+observation data returns gray.
 - Missing non-critical signals can return yellow with reasons.
 
+## Day-of chat recommendation ranking
+The chat assistant compares candidate ramps deterministically before any AI-generated prose is
+used. Ranking prioritizes green windows, then yellow, gray, and red; confidence, ramp metadata
+confidence, verification status, and beginner-friendly amenities adjust the fit score. Fishing
+queries may boost access amenities such as bait availability, parking, restrooms, and kayak
+friendliness, but those boosts never override red safety conditions.
+
+## Daylight-only preference
+For beginner defaults, windows outside conservative Tampa Bay daylight hours are downgraded from
+green to yellow with an `outside_daylight` reason. This is a planning simplification, not an
+official sunrise/sunset calculation.
+
 ## Example reason object
 ```json
 {

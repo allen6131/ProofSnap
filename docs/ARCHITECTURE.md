@@ -27,7 +27,10 @@
 
 ## Mobile flow
 - Auth: login/register.
-- Main tabs: Dashboard, Ramps, Saved, Settings.
+- Main tabs: Dashboard, Ask, Ramps, Saved, Settings.
+- Ask sends authenticated recommendation prompts to the API. The backend gathers
+  official-source context, ranks candidate ramps deterministically, and uses OpenAI
+  only for source-grounded plain-language explanation when configured.
 - Ramp detail includes launch windows, source notes, save action, issue report, and disclaimer.
 
 ## Admin flow
@@ -41,3 +44,4 @@
 - Keep API and worker as separately scalable services.
 - Replace dev fixture fallbacks with robust cache layers and richer station-linking logic.
 - Add proper PostGIS geography columns and spatial indexes for nearest-station matching at scale.
+- Add stronger rate limiting and observability around chat/OpenAI calls before broad launch.

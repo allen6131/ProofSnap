@@ -31,6 +31,16 @@
 - [ ] Weather alerts affect launch guidance.
 - [ ] Scores are not described as official agency recommendations.
 
+## Chat recommendations
+- [ ] Chat tab accepts “where is the best spot to go fishing/boating today”.
+- [ ] Chat recommendations rank ramps/spots with color, confidence, top reasons, and best window.
+- [ ] Official source names and freshness/status are visible in the chat response.
+- [ ] Missing or unavailable data is shown instead of hidden.
+- [ ] OpenAI key absence or outage falls back to deterministic source-backed guidance.
+- [ ] Fishing responses include FWC regulation reminders and do not guarantee catches.
+- [ ] Chat does not request device location automatically.
+- [ ] Chat repeats the planning-only disclaimer.
+
 ## Saved ramps and preferences
 - [ ] Signed-in user can save a ramp.
 - [ ] Saved ramp appears in Dashboard and Saved tabs.

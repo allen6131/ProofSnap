@@ -15,7 +15,9 @@
 ## NOAA CO-OPS Tides & Currents
 - Data endpoint: `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter`
 - Metadata endpoint: `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json`
-- Products supported in MVP: `predictions`.
+- Products supported in MVP: `predictions`, with client helpers for `water_level`,
+  `water_temperature`, `air_temperature`, `wind`, and current-style payloads when stations support
+  those products.
 - Recommended params:
   - `units=english`
   - `format=json`
@@ -30,6 +32,8 @@
   - `{station}.spec` (wave summaries)
 - Poll schedule for MVP worker: hourly near minute 30.
 - Parser handles `MM` as missing.
+- Runtime refresh attempts live station `.txt` and `.spec` reads and falls back to fixtures only for
+  tests/development failures.
 
 ## Open-Meteo Marine (optional)
 - Endpoint: `https://marine-api.open-meteo.com/v1/marine`
@@ -41,6 +45,19 @@
   - `https://www.arcgis.com/home/item.html?id=1f95492ed263499f8faff1874f3de4ca`
   - `https://gis.myfwc.com/mapping/rest/services/Open_Data/FWC_Florida_Boat_Ramp_Inventory/MapServer/4/query`
 - Imported as GeoJSON and filtered to Tampa Bay demo bbox.
+
+## Florida FWC fishing regulations
+- Source: `https://myfwc.com/fishing/saltwater/recreational/`
+- Used by chat recommendations as an official attribution/reminder source for fishing questions.
+- rampready does not provide legal advice; users must verify current seasons, closures, licenses,
+  size limits, and bag limits with FWC.
+
+## Florida Department of Health beach water quality
+- Program info: `https://www.floridahealth.gov/environmental-health/beach-water-quality/`
+- Supplemental ArcGIS source used by chat recommendations for nearby sampling/advisory context when
+  available.
+- Missing or unavailable water-quality data is shown as supplemental missing data and does not block
+  core launch scoring.
 
 ## OpenStreetMap (dev-only)
 - OSM slipway/access tags supported in architecture.
