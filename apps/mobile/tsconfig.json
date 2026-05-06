@@ -18,5 +18,6 @@
   "include": [
     "src",
     "index.ts"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

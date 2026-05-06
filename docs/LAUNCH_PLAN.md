@@ -1,74 +1,68 @@
-# ProofSnap Launch Plan
+# rampready Launch Plan
 
 ## Narrow initial niche
-Launch for **Airbnb cleaners and small property managers** first.
+Launch for **new trailer boaters in Florida/Tampa Bay** first.
 
-## App name options
-- ProofSnap
-- JobProof
-- SiteProof
-- PhotoReport Pro
-- WorkProof Reports
+## App name
+rampready
 
 ## App Store subtitle
-Photo reports for jobs, rentals, and repairs.
+Beginner boat ramp planning.
 
 ## Short description
-Create timestamped photo reports for cleaning, repairs, inspections, move-ins, and job completion. Export a professional PDF in seconds.
+Find beginner-friendly boat ramps and launch windows before you tow to the water.
 
 ## Long description draft
-ProofSnap helps cleaners, contractors, landlords, and property managers document work with professional photo reports. Take or import photos, add timestamps and notes, then export a polished PDF you can send to clients, owners, tenants, or your own records.
+rampready helps people new to boating plan a calmer launch. Search nearby ramps, save favorites, and see plain-language launch windows based on weather, tide, water-level, buoy, alert, and ramp data.
 
 Useful for:
-- Airbnb cleaning proof
-- Job completion reports
-- Before/after documentation
-- Property condition reports
-- Move-in and move-out records
-- Repair and maintenance proof
+- First-time trailer boaters
+- Families launching small boats or personal watercraft
+- Boating-course graduates planning a first solo launch
+- Occasional boaters who want a quick pre-launch check
+- Local boating clubs helping beginners build good habits
 
 Core features:
-- Create job/property reports
-- Add photos from camera or library
-- Add captions and section labels
-- Optional location stamps
-- Export clean PDFs
-- Share reports through email, text, files, and other apps
-- Add business branding with Pro
+- Search launch ramps
+- Save favorite ramps
+- See green/yellow/red launch-window guidance
+- Understand the top reasons behind each score
+- Tune comfort limits for wind, gusts, waves, tide, and daylight
+- Report ramp issues for review
 
 ## Keywords to test
-photo report, cleaning report, property inspection, job proof, work report, before after photos, landlord documentation, contractor report, PDF report, inspection photos
+boat ramp, boat launch, trailer boating, new boater, boating safety, launch ramp, tide, marine weather, Tampa Bay boating, Florida boat ramps
 
 ## First demo video idea
 1. Open app.
-2. Tap Cleaning Proof Report.
-3. Take before photo.
-4. Take after photo.
-5. Add short caption.
-6. Tap Export PDF.
-7. Share to client.
+2. Search for a Tampa Bay ramp.
+3. Open ramp detail.
+4. Review the next 48 hours of launch windows.
+5. Save the ramp.
+6. Adjust comfort limits in Settings.
+7. Show updated Dashboard guidance.
 
 ## Landing page headline
-Professional photo proof reports in seconds.
+Know before you tow.
 
 ## Landing page sections
-- Show before/after cleaning proof.
-- Show sample PDF.
-- Explain local-first privacy.
-- Show pricing.
+- Explain beginner-friendly launch planning.
+- Show a ramp detail and launch-window example.
+- Explain official sources and confidence.
+- Show safety disclaimer.
 - Capture email for beta users.
 
 ## Pricing to test
 Start simple:
-- Free: 3 reports/month with watermark.
-- Pro Annual: $29.99/year.
-- Lifetime: $29.99 one-time.
+- Free: limited saved ramps.
+- Pro Annual: $19.99/year.
+- Lifetime: $29.99-$49.99 one-time.
 
-If users are mostly businesses, test $39.99/year and $49.99 lifetime later.
+If users want regional packs or richer planning reminders, test higher annual pricing later.
 
 ## Avoid at launch
-- Do not claim legal admissibility.
-- Do not overpromise dispute protection.
-- Do not market as insurance software.
-- Do not collect user photos on a server.
+- Do not imply scores are official marine forecasts.
+- Do not position the app as navigation, emergency, or safety-critical software.
+- Do not overpromise safety.
+- Do not hide uncertainty when data is stale, missing, or preliminary.
 

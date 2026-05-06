@@ -1,6 +1,6 @@
 # Launch Scoring
 
-RampReady computes 3-hour launch windows for 7 days.
+rampready computes 3-hour launch windows for 7 days.
 
 ## Window blocks
 - 00:00-03:00

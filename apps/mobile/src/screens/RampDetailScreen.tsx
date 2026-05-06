@@ -64,7 +64,9 @@ export function RampDetailScreen({ rampId }: { rampId: string }) {
         <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '700' }}>Report issue</Text>
       </Pressable>
 
-      <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 8 }}>Next 48h launch windows</Text>
+      <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 8 }}>
+        Next 48h beginner-friendly launch windows
+      </Text>
       {windows.map((window) => (
         <View key={window.starts_at} style={{ borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 10, padding: 10, marginBottom: 8 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

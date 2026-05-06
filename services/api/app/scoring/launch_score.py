@@ -146,7 +146,7 @@ def _evaluate_color(
                 "info",
                 "missing_critical_data",
                 "Critical forecast and observation data missing.",
-                "RampReady",
+                "rampready",
             )
         )
         return "gray", 20.0, reasons, True, True, False
@@ -370,14 +370,14 @@ def _evaluate_color(
                     "caution",
                     "borderline_conditions",
                     "Some factors are close to limits.",
-                    "RampReady",
+                    "rampready",
                 )
             )
         return "yellow", 60.0, reasons, mismatch, wave is None, False
 
     reasons.append(
         _reason(
-            "good", "conditions_ok", "Conditions are below your configured limits.", "RampReady"
+            "good", "conditions_ok", "Conditions are below your configured limits.", "rampready"
         )
     )
     if wind is not None:
@@ -489,7 +489,7 @@ def build_launch_windows(
                     "caution",
                     "confidence_medium",
                     "Data confidence is below high threshold.",
-                    "RampReady",
+                    "rampready",
                     confidence,
                     70,
                 )
@@ -501,7 +501,7 @@ def build_launch_windows(
                     "info",
                     "low_confidence",
                     "Not enough fresh data for a responsible score.",
-                    "RampReady",
+                    "rampready",
                     confidence,
                     30,
                 )

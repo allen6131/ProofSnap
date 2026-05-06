@@ -1,73 +1,54 @@
-# ProofSnap Manual QA Checklist
+# rampready Manual QA Checklist
 
 ## App launch
-- [ ] App launches without network connection.
-- [ ] Empty report list explains the value of the app.
-- [ ] Settings screen opens.
+- [ ] Mobile app launches and shows the `rampready` sign-in screen.
+- [ ] Admin app launches and shows the `rampready Admin` login screen.
+- [ ] Settings screen explains beginner-friendly launch preferences.
 
-## Report creation
-- [ ] Create blank report.
-- [ ] Create report from each built-in template.
-- [ ] Report title is required.
-- [ ] Report appears in list after creation.
-- [ ] Report persists after app restart.
+## Backend setup
+- [ ] API health endpoint returns 200.
+- [ ] Version endpoint returns `rampready-api`.
+- [ ] Migrations run successfully.
+- [ ] Seed job creates the admin user and Tampa Bay region.
+- [ ] FWC import creates ramp records.
 
-## Report editing
-- [ ] Edit title.
-- [ ] Edit client/property/job field.
-- [ ] Edit address.
-- [ ] Edit general notes.
-- [ ] Mark report completed.
-- [ ] Changes persist after restart.
+## Auth
+- [ ] User can register from mobile.
+- [ ] User can log in from mobile.
+- [ ] Admin can log in with seeded credentials.
+- [ ] Invalid credentials show a friendly error.
 
-## Photos
-- [ ] Add photo from camera.
-- [ ] Add photo from library.
-- [ ] Add at least five photos to one report.
-- [ ] Edit photo caption.
-- [ ] Edit section label.
-- [ ] Delete photo.
-- [ ] Denying camera permission shows friendly message.
-- [ ] Denying photo permission shows friendly message.
-- [ ] Location stamping is optional.
-- [ ] Denying location permission does not block photo capture.
+## Ramp discovery
+- [ ] Ramp search returns ramps for the target region.
+- [ ] Search by ramp or city narrows results.
+- [ ] Ramp detail opens from search results.
+- [ ] Ramp detail includes the planning disclaimer.
 
-## PDF export
-- [ ] Export report with no photos.
-- [ ] Export report with several photos.
-- [ ] PDF includes title and metadata.
-- [ ] PDF includes captions.
-- [ ] PDF includes timestamps.
-- [ ] PDF includes optional location when enabled.
-- [ ] Free PDF includes watermark/footer.
-- [ ] Pro PDF removes watermark.
-- [ ] Pro PDF includes branding when configured.
-- [ ] PDF layout is readable on phone and desktop.
+## Beginner launch guidance
+- [ ] Launch windows show green/yellow/red/gray states.
+- [ ] Each window explains top reasons in plain language.
+- [ ] Missing or stale source data lowers confidence.
+- [ ] Weather alerts affect launch guidance.
+- [ ] Scores are not described as official agency recommendations.
 
-## Sharing
-- [ ] Share sheet opens after PDF generation.
-- [ ] PDF can be sent to email or saved to files.
-- [ ] Canceling share does not crash app.
-- [ ] Sharing unavailable/error path is handled.
+## Saved ramps and preferences
+- [ ] Signed-in user can save a ramp.
+- [ ] Saved ramp appears in Dashboard and Saved tabs.
+- [ ] Free-tier saved-ramp limit is enforced.
+- [ ] User can update boat type and weather/tide thresholds.
+- [ ] Updated preferences affect launch-window scoring.
 
-## Settings and branding
-- [ ] Save company name.
-- [ ] Save contact info.
-- [ ] Save logo image.
-- [ ] Branding persists after restart.
-- [ ] Branding appears in Pro PDF.
+## Admin
+- [ ] Overview metrics load.
+- [ ] Ramps page lists imported ramps.
+- [ ] Admin can update and verify a ramp.
+- [ ] Jobs page can trigger supported import/recompute jobs.
+- [ ] Reports and stations pages load.
 
-## Free/Pro gates
-- [ ] Free user can create up to 3 reports/month.
-- [ ] Free user sees upgrade prompt after limit.
-- [ ] Pro flag allows unlimited reports.
-- [ ] Free user PDFs show watermark.
-- [ ] Pro user PDFs do not show watermark.
-
-## Backup
-- [ ] App clearly says backup is optional and not configured in the MVP.
-- [ ] No report/photo data uploads during normal MVP flows.
-- [ ] Backup provider boundary remains separate from report/photo repositories.
+## Safety copy
+- [ ] App states it is planning-only.
+- [ ] App does not claim to replace nautical charts, forecasts, or local judgment.
+- [ ] Official source names are visible where relevant.
 
 ## Regression
 - [ ] Typecheck passes.

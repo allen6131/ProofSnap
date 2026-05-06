@@ -1,3 +1,3 @@
-# RampReady API
+# rampready API
 
-Backend service for RampReady MVP.
+Backend service for the rampready MVP.

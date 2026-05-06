@@ -23,7 +23,10 @@ export function RegisterScreen({ onToggle }: { onToggle: () => void }) {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 20, gap: 12 }}>
-      <Text style={{ fontSize: 28, fontWeight: '800' }}>Create account</Text>
+      <Text style={{ fontSize: 28, fontWeight: '800' }}>Create your rampready account</Text>
+      <Text style={{ color: '#4a5568' }}>
+        Save favorite ramps and get launch guidance tuned for your boat and comfort level.
+      </Text>
       <TextInput value={email} onChangeText={setEmail} placeholder="Email" autoCapitalize="none" style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10 }} />
       <TextInput value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry style={{ borderWidth: 1, borderColor: '#cbd5e0', borderRadius: 8, padding: 10 }} />
       <Pressable onPress={register} style={{ backgroundColor: '#1a202c', borderRadius: 8, padding: 12 }}>

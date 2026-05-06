@@ -39,7 +39,11 @@ export function DashboardScreen() {
   return (
     <ScrollView style={{ flex: 1, padding: 16 }} refreshControl={<RefreshControl refreshing={loading} onRefresh={load} />}>
       <Text style={{ fontSize: 24, fontWeight: '700', marginBottom: 12 }}>Dashboard</Text>
-      {items.length === 0 ? <Text style={{ color: '#718096' }}>{message || 'Save your first ramp to get launch windows.'}</Text> : null}
+      {items.length === 0 ? (
+        <Text style={{ color: '#718096' }}>
+          {message || 'Save your first ramp to compare beginner-friendly launch windows.'}
+        </Text>
+      ) : null}
       {items.map((item) => (
         <View key={item.ramp_id} style={{ backgroundColor: '#fff', borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#e2e8f0' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
