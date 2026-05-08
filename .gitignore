@@ -19,6 +19,10 @@ build/
 *.sqlite3
 *.db
 coverage/
+backend/.serverless/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 htmlcov/
 .DS_Store
 
