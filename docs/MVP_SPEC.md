@@ -1,86 +1,84 @@
-# ProofSnap MVP Specification
+# rampready MVP Specification
 
 ## Non-negotiable MVP scope
 The first version should be intentionally small:
 
-1. Local reports
-2. Photo capture/import
-3. Photo notes and timestamps
-4. Optional location stamps
-5. PDF generation
-6. Native sharing
-7. Branding settings
-8. Free/Pro gate placeholder
+1. Ramp search
+2. Ramp detail pages
+3. Auth and saved ramps
+4. User launch preferences
+5. Weather/tide/alert source ingestion
+6. Beginner-friendly launch-window scoring
+7. Ramp issue reporting
+8. Admin curation tools
 
-## Report list
+## Ramp search
 ### Requirements
-- Show all reports sorted by updated date descending.
-- Show title, template, client/property name, photo count, and updated date.
-- Empty state: explain what the app does and show **Create your first report**.
+- Show ramps for the target launch region.
+- Allow search by ramp, city, or area.
+- Show ramp name, location, and confidence score.
+- Empty state should explain how to search or import demo data.
 
 ### Actions
-- Create new report
-- Open report
-- Archive/delete report with confirmation
+- Search ramps.
+- Open ramp detail.
+- Save ramp when signed in.
 
-## Template picker
+## Ramp detail
 ### Requirements
-- Show four starter templates.
-- Allow blank report.
-- Template selection should prefill useful section labels, not lock the user into a rigid form.
+- Show ramp name, city/state, verification status, local hazards, notes, and disclaimer.
+- Show launch windows for the next 48 hours.
+- Include plain-language reasons for each score.
+- Show official data source names.
+- Allow issue reporting.
 
-## Report editor
+## Dashboard and saved ramps
+### Requirements
+- Show saved ramps with the next best launch window.
+- Highlight active alerts.
+- Explain what to do when no ramps are saved.
+- Enforce free-tier saved-ramp limits through backend logic.
+
+## Launch preferences
 ### Fields
-- Title
-- Client/job/property name
-- Address
-- General notes
-- Status: draft/completed
+- Boat type
+- Max wind in knots
+- Max gust in knots
+- Max wave height in feet
+- Optional minimum tide/water level
+- Daylight-only preference
 
-### Photo list
-- Show thumbnail, caption, timestamp, section label.
-- Allow reordering by simple move up/down if drag-and-drop is too much.
-- Allow edit caption/section.
-- Allow delete with confirmation.
-
-## Photo capture/import
 ### Requirements
-- Add from camera.
-- Add from photo library.
-- Copy selected/captured images into app-controlled local storage.
-- Store metadata in SQLite.
-- Do not rely on the original external asset remaining available.
-- Optional location stamping only after permission is granted.
+- Store preferences on the user profile.
+- Use preferences in launch-window scoring.
+- Keep defaults conservative for new boaters.
 
-## PDF export
+## Source ingestion
 ### Requirements
-- Generate locally.
-- Include all report metadata and photos.
-- Use readable layout.
-- Free users get a watermark/footer.
-- Pro users can include branding and remove watermark.
+- Import FWC ramps for the launch region.
+- Pull or fixture official forecast, tide, buoy, and alert data.
+- Mark stale or missing data clearly.
+- Keep source-specific code isolated behind clients/importers.
 
-## Sharing
+## Admin dashboard
 ### Requirements
-- Share the generated PDF through the platform share sheet.
-- Show user-friendly errors if sharing is unavailable or canceled.
+- Admin login.
+- Overview metrics.
+- Ramp list and ramp edit/verify flow.
+- Source refresh and import jobs.
+- Reports and stations review.
 
-## Settings/Branding
+## Disclaimers
 ### Requirements
-- Company name
-- Contact name
-- Email
-- Phone
-- Website
-- Logo image
-- Footer text
-- Pro badge if enabled
+- State that rampready is planning-only.
+- Do not present scores as official NOAA/NWS recommendations.
+- Encourage users to check official sources and local conditions before launching.
 
 ## Entitlement placeholder
 Build the app so real purchases can be added later.
 
 For MVP development:
-- Use a local setting or constant for `isPro`.
-- Implement the free monthly report limit in a small, tested entitlement module.
-- Keep purchase-provider-specific code behind an interface.
+- Use backend subscription-tier fields.
+- Keep limits small and transparent.
+- Keep purchase-provider-specific code out of the core ramp/scoring flow.
 

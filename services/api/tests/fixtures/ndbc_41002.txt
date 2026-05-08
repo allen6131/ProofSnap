@@ -1,0 +1,3 @@
+#YY MM DD hh mm WDIR WSPD GST WVHT DPD APD MWD PRES ATMP WTMP
+#yr mo dy hr mn degT m/s m/s m sec sec degT hPa degC degC
+26 04 28 03 50 140 6.2 8.5 1.4 7 5 150 1014.2 25.0 24.0

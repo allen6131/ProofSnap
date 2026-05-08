@@ -1,225 +1,136 @@
-# AGENTS.md - ProofPack
+# AGENTS.md - rampready
 
 ## Project mission
-Build **ProofPack**, a local-first mobile app for service workers, cleaners, contractors, landlords, property managers, and tenants who need to create professional timestamped photo reports and export/share them as PDFs.
+Build **rampready**, a beginner-friendly planning app for people new to boating who need help deciding whether a ramp and launch window look approachable before towing to the water.
 
-The MVP promise is: **create a report, add photos with notes/timestamps, export a clean PDF, and share it in one tap.**
+The MVP promise is: **search ramps, save favorites, understand weather/tide/alert-driven launch windows, and tune guidance to a beginner's boat and comfort level.**
 
-## Assumed stack
-Use this stack unless the repository already uses something else:
-
-- React Native + Expo
-- TypeScript
-- Expo Router for navigation in a new project
-- Local-first storage
-- SQLite for structured report/photo/settings data
-- FileSystem for local photo/PDF files
-- Expo ImagePicker for camera and gallery import in the MVP
-- Expo Location for optional GPS stamping
-- Expo Print for generating PDFs from HTML
-- Expo Sharing / native share sheet for exporting PDFs
-
-Avoid adding a backend for the MVP.
+## Current stack
+- React Native + Expo mobile app in `apps/mobile`.
+- TypeScript everywhere in frontend packages.
+- Vite + React admin app in `apps/admin`.
+- FastAPI backend in `services/api`.
+- SQLAlchemy 2.x, Alembic, PostgreSQL/PostGIS for local/prod-like data.
+- SQLite for backend tests.
+- APScheduler worker for recurring source refresh jobs.
+- Docker Compose for Postgres, Redis, API, worker, and optional admin dev service.
 
 ## Product constraints
-- No account system in the MVP.
-- No server-side storage in the MVP.
-- No social/community features.
+- rampready is planning-only.
+- It is not a navigation tool, emergency tool, safety-critical system, or substitute for official marine forecasts, nautical charts, local knowledge, or safe boating judgment.
+- Target Florida/Tampa Bay first.
+- Bias defaults toward people new to boating.
+- Prefer plain-language explanations over raw data dumps.
+- Keep source attribution visible for NWS, NOAA CO-OPS, NOAA NDBC, FWC, and other official sources.
+- Mark missing, stale, or low-confidence data clearly.
+- Do not imply launch scores are official government recommendations.
 - No AI features in the MVP.
-- No subscriptions implementation until the core report flow works.
-- Do not upload photos, location, reports, or client data anywhere.
-- Location must be opt-in and easy to disable.
-- Keep the app useful offline.
-- Prioritize reliability over cleverness.
-
-## Monetization model to preserve in the codebase
-Build the product so it can support this later:
-
-- Free tier: 3 reports per month, PDF watermark, basic templates.
-- Pro tier: unlimited reports, remove watermark, add logo/company info, reusable client/property info, higher-quality PDF export.
-- Preferred first paid options: annual unlock and lifetime unlock.
-
-For the MVP, create an entitlement/paywall abstraction, but use a local dev entitlement flag until real App Store / Google Play purchases are added.
+- No paid subscription implementation until the core planning flow works.
 
 ## Core MVP user flow
-1. User opens the app and sees a list of reports.
-2. User taps **New Report**.
-3. User chooses a template or starts with a blank report.
-4. User enters title, job/client/property name, optional address, and optional notes.
-5. User adds photos from camera or gallery.
-6. Each photo stores local URI, timestamp, optional location, optional caption/note, and section label.
-7. User previews or exports a PDF.
-8. User shares the PDF using the native share sheet.
+1. User opens the app and registers or logs in.
+2. User searches launch ramps in the target region.
+3. User opens a ramp detail page.
+4. User reviews beginner-friendly launch windows, reasons, confidence, source notes, and disclaimer.
+5. User saves favorite ramps.
+6. User adjusts boat type and comfort thresholds in Settings.
+7. Dashboard shows saved ramps with upcoming launch guidance.
+8. User can report a ramp issue for admin review.
 
-## MVP templates
-Include these built-in templates as data/config, not hardcoded throughout UI:
+## Admin MVP flow
+1. Admin logs into the web dashboard.
+2. Admin reviews overview metrics and source health.
+3. Admin imports or refreshes source data.
+4. Admin reviews, edits, and verifies ramps.
+5. Admin reviews submitted ramp reports and station/source status.
 
-- Job Completion Report
-- Before / After Report
-- Property Condition Report
-- Cleaning Proof Report
-
-Each template may define default sections, but the report editor should still work if a template has no sections.
-
-## Screens
-Create a clean, boring, production-ready app structure with these screens:
-
-- Reports List
-- New Report / Template Picker
-- Report Editor
-- Add/Edit Photo Note
-- PDF Preview / Export
-- Settings / Branding
-- Paywall Placeholder / Upgrade Explanation
-
-## Data model
+## Data model themes
 Use IDs as strings. Prefer UUIDs if available.
 
-### Report
-- id
-- title
-- templateId
-- clientName
-- propertyName
-- address
-- generalNotes
-- createdAt
-- updatedAt
-- completedAt
-- status: draft | completed | archived
+Core entities include:
+- `User`
+- `UserProfile`
+- `Region`
+- `Ramp`
+- `SavedRamp`
+- `WeatherForecast`
+- `Observation`
+- `TidePrediction`
+- `Alert`
+- `LaunchScore`
+- `RampReport`
+- `DataSourceStatus`
+- `JobRun`
 
-### ReportPhoto
-- id
-- reportId
-- localUri
-- fileName
-- caption
-- sectionLabel
-- takenAt
-- latitude
-- longitude
-- locationAccuracy
-- createdAt
-- sortOrder
-
-### BrandingSettings
-- companyName
-- contactName
-- email
-- phone
-- website
-- logoUri
-- footerText
-
-### EntitlementState
-- isPro
-- reportsCreatedThisMonth
-- monthlyReportLimit
-- watermarkEnabled
-
-## PDF requirements
-Generate PDFs locally from HTML.
-
-PDF content must include:
-- Report title
-- Template name
-- Client/property/job fields when present
-- Address when present
-- Creation/completion date
-- Optional company branding for Pro users
-- General notes when present
-- Photo sections
-- Each photo with timestamp, optional caption, optional location line
-- Footer with app name and optional watermark for free users
-
-PDF layout:
-- Use a simple, printable style.
-- Avoid tiny text.
-- Do not crop photos aggressively.
-- Use page-break rules so photo cards do not split badly.
-- Keep the HTML generator in a pure function that can be unit tested.
+## Scoring requirements
+- Generate launch windows from source data and user thresholds.
+- Return a simple color: green, yellow, red, or gray.
+- Include reasons in plain language.
+- Include confidence.
+- Downgrade confidence for missing, stale, or conflicting data.
+- Keep scoring deterministic and unit tested.
+- Keep official source data separate from rampready interpretations.
 
 ## Code organization
-Use a structure similar to this unless the project already has conventions:
+Respect the existing monorepo structure:
 
 ```text
-src/
-  app/
-  components/
-  features/
-    reports/
-    photos/
-    pdf/
-    settings/
-    entitlement/
-  data/
-    db/
-    repositories/
-  lib/
-    dates.ts
-    ids.ts
-    permissions.ts
-  types/
+apps/
+  mobile/
+  admin/
+services/
+  api/
+docs/
 ```
 
-Keep platform and library calls out of UI components when practical. Use feature-level services/repositories.
+Keep platform/library calls out of UI components when practical. Use feature-level services, API clients, and backend service modules.
 
 ## Coding standards
-- TypeScript everywhere.
+- TypeScript in frontend packages.
+- Python 3.12 in backend.
 - Prefer small typed functions over large components.
 - Avoid `any` unless there is a clear reason.
 - Keep UI state simple.
-- Use explicit loading/error/empty states.
+- Use explicit loading, error, and empty states.
 - Validate user input before saving.
-- Handle permission denial gracefully.
-- Show friendly error messages for PDF generation and sharing failures.
+- Show friendly error messages for auth, API, source, and scoring failures.
 - Do not leave dead code or unused dependencies.
 - Keep comments rare and useful.
 
 ## Testing expectations
-Add tests where they give high value without slowing the project down:
+Add or maintain tests where they give high value without slowing the project down:
+- Launch scoring tests.
+- Unit conversion tests.
+- Importer/parser tests.
+- Auth, saved-ramp limit, and admin route smoke tests.
+- Frontend typechecks.
 
-- PDF HTML generation tests.
-- Date formatting tests.
-- Repository/data mapping tests if practical.
-- Entitlement limit logic tests.
-
-Also include a manual QA checklist in the repo.
+Also keep `docs/QA_CHECKLIST.md` aligned with the actual product.
 
 ## Privacy and permissions
-Make permission prompts specific and honest:
-
-- Camera: needed to take report photos.
-- Photos: needed to import existing job/property photos.
-- Location: optional, used only to stamp photos with job location.
-
-Do not request location automatically on app launch. Request it only when the user enables location stamping or takes/imports a photo with location stamping turned on.
+- Do not request device location automatically on launch.
+- Do not record tracks or collect navigation history in the MVP.
+- If location-based search is added later, make it opt-in and explain why it is needed.
+- Do not upload personal boating activity beyond user-created account, profile, saved-ramp, and report data required by the API.
 
 ## Out of scope until MVP is complete
-Do not implement these until the core flow is stable:
-
-- Cloud sync
-- Login/accounts
-- Teams
-- Real-time collaboration
-- OCR
-- AI summaries
-- Maps
-- Complex invoicing
-- E-signatures
-- Client portals
-- Chat/messaging
-- Web dashboard
-- Marketplace features
+- Navigation or routing.
+- Emergency/SOS features.
+- Charts or mapplotter replacement.
+- Social/community features.
+- AI recommendations.
+- Complex offline packs.
+- Real-money subscriptions.
+- Multi-region expansion beyond the first launch area.
 
 ## Definition of done for the MVP
 The MVP is done when a user can:
-
-- Create a report.
-- Add at least five photos.
-- Add captions/notes.
-- Export a readable PDF.
-- Share that PDF to another app.
-- Restart the app and still see the report and photos.
-- Use the app without an internet connection.
-
+- Register and log in.
+- Search ramps.
+- Open ramp details.
+- Understand next launch windows and top reasons.
+- Save ramps.
+- Adjust beginner comfort thresholds.
+- Restart the app and still see saved ramps.
+- See clear planning-only disclaimers.
+- Admin can import/curate ramps and review source status.
